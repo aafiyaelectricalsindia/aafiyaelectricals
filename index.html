@@ -1009,7 +1009,7 @@
 
       if (!pin) { err.innerText = 'कृपया पिन दर्ज करें!'; err.style.display = 'block'; return; }
 
-      if (pin === "2581" || pin === "4455") {
+      if (pin === "2580" || pin === "4455") {
         err.style.display = 'none';
         activePin = pin;
         document.getElementById('loginOverlay').style.display = 'none';
@@ -1049,10 +1049,10 @@
     }
 
     function getAuthorizedPin(actionDescription) {
-      if (activePin === "4455" || activePin === "2581") return activePin;
+      if (activePin === "4455" || activePin === "2580") return activePin;
       var entered = prompt("🔐 सुरक्षा जाँच (पिन दर्ज करें):", "");
       if (!entered) return null;
-      if (entered !== "4455" && entered !== "2581") { alert("❌ गलत पिन!"); return null; }
+      if (entered !== "4455" && entered !== "2580") { alert("❌ गलत पिन!"); return null; }
       return entered;
     }
 
@@ -1845,8 +1845,8 @@
 
       var isOutJob = (curStatus === 'DELIVERED' || curStatus === 'RETURN');
 
-      // 🛡️ स्टाफ़ (2581) के लिए नियम
-      if (pin === "2581") {
+      // 🛡️ स्टाफ़ (2580) के लिए नियम
+      if (pin === "2580") {
         if (isOutJob) {
           var allInputs = document.querySelectorAll('#jobModal input, #jobModal textarea, #jobModal select');
           for (var idx = 0; idx < allInputs.length; idx++) {
@@ -2118,7 +2118,7 @@
 
       var curStat = r.status || 'DELIVERED';
 
-      if (activePin === "2581" && (curStat === 'DELIVERED' || curStat === 'RETURN')) {
+      if (activePin === "2580" && (curStat === 'DELIVERED' || curStat === 'RETURN')) {
         alert("⚠️ यह सामान डिलीवर (OUT) हो चुका है। इसकी स्थिति नहीं बदल सकती");
         return;
       }
@@ -2159,7 +2159,7 @@
       var warInp = document.getElementById('qsWarValue');
       var qsWarUnitEl = document.getElementById('qsWarUnit');
 
-      if (pin === "2581") {
+      if (pin === "2580") {
         compInp.readOnly = !!(r.components && r.components.trim());
         compInp.style.background = compInp.readOnly ? '#f1f5f9' : '#fff';
         billInp.readOnly = (parseFloat(r.bill || 0) > 0);
@@ -2303,7 +2303,7 @@
         statEl.style.color = '#15803d';
       }
 
-      if (pin === "2581") {
+      if (pin === "2580") {
         nameInp.readOnly = !!(r.name && r.name.trim());
         nameInp.style.background = nameInp.readOnly ? '#f1f5f9' : '#fff';
 
