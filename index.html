@@ -7,52 +7,51 @@
   
   <!-- 🌐 GitHub से Google Sheet से बात करने का जादुई ब्रिज कोड -->
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec"; // (आपका Web App URL)
+  // 🌐 यहाँ अपना असली Web App URL पेस्ट करें (inverted commas के अंदर)
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
 
-    const google = {
-      script: {
-        run: {
-          withSuccessHandler: function(successCallback) {
-            return {
-              withFailureHandler: function(failCallback) {
-                return new Proxy({}, {
-                  get: function(target, prop) {
-                    return function(...args) {
-                      let getActions = ['getSheetData', 'checkDataVersion', 'getCustomerPassbook'];
-                      if (getActions.includes(prop)) {
-                        let url = new URL(WEB_APP_URL);
-                        url.searchParams.append('action', prop);
-                        if (prop === 'getSheetData') url.searchParams.append('pin', args[0]);
-                        else if (prop === 'checkDataVersion') url.searchParams.append('clientVersion', args[0]);
-                        else if (prop === 'getCustomerPassbook') url.searchParams.append('custId', args[0]);
-                        
-                        fetch(url.toString())
-                          .then(res => res.json())
-                          .then(data => successCallback(data))
-                          .catch(err => { if (failCallback) failCallback(err); else console.error(err); });
-                      } else {
-                        let payload = { action: prop, data: args[0], pin: args[1] };
-                        if (prop === 'deleteRecordFromSheet') {
-                          payload.data = { code: args[0], flag: args[1] }; payload.pin = args[2];
-                        } else if (prop === 'restoreRecordFromTrash') {
-                          payload.data = { code: args[0] }; payload.pin = args[1];
-                        }
-                        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) })
-                          .then(res => res.json())
-                          .then(data => successCallback(data))
-                          .catch(err => { if (failCallback) failCallback(err); else console.error(err); });
+  const google = {
+    script: {
+      run: {
+        withSuccessHandler: function(successCallback) {
+          return {
+            withFailureHandler: function(failCallback) {
+              return new Proxy({}, {
+                get: function(target, prop) {
+                  return function(...args) {
+                    let url = new URL(WEB_APP_URL);
+                    let getActions = ['getSheetData', 'checkDataVersion', 'getCustomerPassbook'];
+                    
+                    if (getActions.includes(prop)) {
+                      url.searchParams.append('action', prop);
+                      if (prop === 'getSheetData') url.searchParams.append('pin', args[0]);
+                      else if (prop === 'checkDataVersion') url.searchParams.append('clientVersion', args[0]);
+                      else if (prop === 'getCustomerPassbook') url.searchParams.append('custId', args[0]);
+                    } else {
+                      let payload = { action: prop, data: args[0], pin: args[1] };
+                      if (prop === 'deleteRecordFromSheet') {
+                        payload.data = { code: args[0], flag: args[1] }; payload.pin = args[2];
+                      } else if (prop === 'restoreRecordFromTrash') {
+                        payload.data = { code: args[0] }; payload.pin = args[1];
                       }
-                    };
-                  }
-                });
-              }
-            };
-          }
+                      url.searchParams.append('action', prop);
+                      url.searchParams.append('payload', JSON.stringify(payload));
+                    }
+                    
+                    fetch(url.toString())
+                      .then(res => res.json())
+                      .then(data => successCallback(data))
+                      .catch(err => { if (failCallback) failCallback(err); else console.error(err); });
+                  };
+                }
+              });
+            }
+          };
         }
       }
-    };
-  </script>
-
+    }
+  };
+</script>
   <style>
     :root {
       --primary: #0f766e;
