@@ -7,51 +7,52 @@
   
   <!-- 🌐 GitHub से Google Sheet से बात करने का जादुई ब्रिज कोड -->
   <script>
-  // 🌐 यहाँ अपना असली Web App URL पेस्ट करें (inverted commas के अंदर)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
+    // ⚠️ अपना वही नोटपैड वाला असली Web App URL यहाँ इनवर्टेड कॉमा के अंदर रहने दें
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
 
-  const google = {
-    script: {
-      run: {
-        withSuccessHandler: function(successCallback) {
-          return {
-            withFailureHandler: function(failCallback) {
-              return new Proxy({}, {
-                get: function(target, prop) {
-                  return function(...args) {
-                    let url = new URL(WEB_APP_URL);
-                    let getActions = ['getSheetData', 'checkDataVersion', 'getCustomerPassbook'];
-                    
-                    if (getActions.includes(prop)) {
-                      url.searchParams.append('action', prop);
-                      if (prop === 'getSheetData') url.searchParams.append('pin', args[0]);
-                      else if (prop === 'checkDataVersion') url.searchParams.append('clientVersion', args[0]);
-                      else if (prop === 'getCustomerPassbook') url.searchParams.append('custId', args[0]);
-                    } else {
-                      let payload = { action: prop, data: args[0], pin: args[1] };
-                      if (prop === 'deleteRecordFromSheet') {
-                        payload.data = { code: args[0], flag: args[1] }; payload.pin = args[2];
-                      } else if (prop === 'restoreRecordFromTrash') {
-                        payload.data = { code: args[0] }; payload.pin = args[1];
+    const google = {
+      script: {
+        run: {
+          withSuccessHandler: function(successCallback) {
+            return {
+              withFailureHandler: function(failCallback) {
+                return new Proxy({}, {
+                  get: function(target, prop) {
+                    return function(...args) {
+                      let getActions = ['getSheetData', 'checkDataVersion', 'getCustomerPassbook'];
+                      let url = new URL(WEB_APP_URL);
+                      
+                      if (getActions.includes(prop)) {
+                        url.searchParams.append('action', prop);
+                        if (prop === 'getSheetData') url.searchParams.append('pin', args[0]);
+                        else if (prop === 'checkDataVersion') url.searchParams.append('clientVersion', args[0]);
+                        else if (prop === 'getCustomerPassbook') url.searchParams.append('custId', args[0]);
+                      } else {
+                        let payload = { action: prop, data: args[0], pin: args[1] };
+                        if (prop === 'deleteRecordFromSheet') {
+                          payload.data = { code: args[0], flag: args[1] }; payload.pin = args[2];
+                        } else if (prop === 'restoreRecordFromTrash') {
+                          payload.data = { code: args[0] }; payload.pin = args[1];
+                        }
+                        url.searchParams.append('action', prop);
+                        url.searchParams.append('payload', JSON.stringify(payload));
                       }
-                      url.searchParams.append('action', prop);
-                      url.searchParams.append('payload', JSON.stringify(payload));
-                    }
-                    
-                    fetch(url.toString())
-                      .then(res => res.json())
-                      .then(data => successCallback(data))
-                      .catch(err => { if (failCallback) failCallback(err); else console.error(err); });
-                  };
-                }
-              });
-            }
-          };
+                      
+                      fetch(url.toString())
+                        .then(res => res.json())
+                        .then(data => successCallback(data))
+                        .catch(err => { if (failCallback) failCallback(err); else console.error(err); });
+                    };
+                  }
+                });
+              }
+            };
+          }
         }
       }
-    }
-  };
-</script>
+    };
+  </script>
+
   <style>
     :root {
       --primary: #0f766e;
@@ -291,7 +292,8 @@
           
           <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
           
-          <div class="menu-item mi-missing" onclick="openMissingCodesModal()">
+          <!-- स्टाफ से छुपाने के लिए ID जोड़ी गई है -->
+          <div class="menu-item mi-missing" id="adminMissingMenuItem" onclick="openMissingCodesModal()">
             <span>🔢 छूटे हुए कोड्स</span>
             <span class="menu-count" id="count-MISSING">0</span>
           </div>
@@ -1014,10 +1016,12 @@
           document.getElementById('adminTrashMenuItem').style.display = 'flex';
           document.getElementById('menuItem-WARRANTY').style.display = 'flex';
           document.getElementById('menuItem-DELIVERED').style.display = 'flex';
+          document.getElementById('adminMissingMenuItem').style.display = 'flex'; // एडमिन को छूटे हुए कोड्स दिखेंगे
         } else {
           document.getElementById('adminTrashMenuItem').style.display = 'none';
           document.getElementById('menuItem-WARRANTY').style.display = 'none';
           document.getElementById('menuItem-DELIVERED').style.display = 'none';
+          document.getElementById('adminMissingMenuItem').style.display = 'none'; // स्टाफ से छूटे हुए कोड्स छुप जाएंगे
         }
 
         startTimer();
@@ -2351,9 +2355,7 @@
       for (var i = 0; i < allRecords.length; i++) {
         if (allRecords[i].customerId === custId) custRecords.push(allRecords[i]);
       }
-      if (custRecords.length === 0) return;
-
-      var first = custRecords[0];
+      var first = custRecords.length > 0 ? custRecords[0] : { name: 'ग्राहक', phone: '', address: '-', customerId: custId };
 
       document.getElementById('stmtCustInfo').innerHTML = 
         'ग्राहक: <b>' + first.name + '</b> | 🆔 ID: ' + custId + ' | <b>📞 ' + (first.phone ? formatPhoneWith91(first.phone) : 'नंबर नहीं') + '</b> | 📍 ' + (first.address || '-');
@@ -2634,7 +2636,8 @@
           '<button type="button" class="btn" style="background: #10b981; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); openQuickPayModalFromCard(\'' + r.code + '\')">💵 पैसे जमा करें</button>' +
           '<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px;" onclick="printSpecificJob(\'' + r.code + '\')">🖨️ पक्का बिल प्रिंट</button>' +
           '<button type="button" class="btn" style="background: #0284c7; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editJobFromBadge(\'' + r.code + '\')">✏️ जॉब एडिट करें</button>' +
-          '<button type="button" class="btn" style="background: #f59e0b; font-size: 0.9rem; padding: 10px; color: #78350f;" onclick="closeJobDetailHub(); openStatement(\'' + r.customerId + '\')">📄 ग्राहक खाता</button>' +
+          // 🛠️ यहाँ क्लिक करते ही पॉपअप गायब होने की समस्या ठीक कर दी गई है (event.stopPropagation जोड़कर)
+          '<button type="button" class="btn" style="background: #f59e0b; font-size: 0.9rem; padding: 10px; color: #78350f;" onclick="event.stopPropagation(); closeJobDetailHub(); openStatement(\'' + r.customerId + '\')">📄 ग्राहक खाता</button>' +
           '<button type="button" class="btn" style="background: #8b5cf6; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editCustomerFromBadge(\'' + r.customerId + '\')">👤 ग्राहक प्रोफ़ाइल</button>' +
           '<button type="button" class="btn" style="background: #0f766e; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); repeatCustomer(' + origIdx + ')">➕ नया सामान जोड़ें</button>' +
           '<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px; grid-column: span 2;" onclick="applySameReturnFromHub(\'' + r.code + '\')">🔄 सेम रिटर्न (RETURN बिना काम)</button>' +
