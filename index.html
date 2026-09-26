@@ -7,7 +7,7 @@
   
   <!-- 🌐 GitHub से Google Sheet से बात करने का जादुई ब्रिज कोड -->
   <script>
-    // ⚠️ अपना वही नोटपैड वाला असली Web App URL यहाँ इनवर्टेड कॉमा के अंदर रहने दें
+    // ⚠️ आपका असली Web App URL
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
 
     const google = {
@@ -253,7 +253,6 @@
 
   <!-- मुख्य ऐप स्क्रीन -->
   <div id="mainApp">
-    <!-- लाइन 1: AAFIYA ELECTRICALS | [➕ NEW] | [🔄 रिफ़्रेश] | [ड्रॉपडाउन मेन्यू] -->
     <div class="top-nav-bar">
       <div class="brand-title">AAFIYA ELECTRICALS</div>
       
@@ -274,7 +273,6 @@
           <span style="font-size: 0.75rem;">▼</span>
         </button>
 
-        <!-- रंग-बिरंगा मेन्यू -->
         <div id="topDropdownMenu" class="top-dropdown-menu" style="display: none;">
           <div style="padding: 6px 10px; font-size: 0.74rem; color: #64748b; font-weight: 900; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; margin-bottom: 4px;">
             ⏳ 15 MIN AUTO LOCK
@@ -286,13 +284,11 @@
           <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
           <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
           
-          <!-- वारंटी व डिलीवर केवल एडमिन (4455) को दिखेंगे -->
           <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
           <div class="menu-item mi-delivered" id="menuItem-DELIVERED" onclick="selectTopFilter('DELIVERED')"><span>📦 डिलीवर</span> <span class="menu-count" id="count-DELIVERED">0</span></div>
           
           <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
           
-          <!-- स्टाफ से छुपाने के लिए ID जोड़ी गई है -->
           <div class="menu-item mi-missing" id="adminMissingMenuItem" onclick="openMissingCodesModal()">
             <span>🔢 छूटे हुए कोड्स</span>
             <span class="menu-count" id="count-MISSING">0</span>
@@ -310,18 +306,15 @@
       </div>
     </div>
 
-    <!-- लाइन 2: सर्च बार -->
     <div style="margin-bottom: 10px;">
       <input type="text" id="searchInput" class="search-box" placeholder="🔍 कोड, ID, ग्राहक, मोबाइल, सामान से खोजें..." onkeyup="searchRecords()">
       <div id="searchStats" style="font-size: 0.8rem; color: #64748b; font-weight: 800; padding: 0 2px;"></div>
     </div>
 
-    <!-- लाइन 3: ग्राहक जॉब कार्ड्स -->
     <div id="loader">🔄 GOOGLE SHEET से डेटा लोड हो रहा है...</div>
     <div id="resultsArea"></div>
   </div>
 
-  <!-- छूटे हुए जॉब कोड्स मॉडल -->
   <div id="missingCodesModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header" style="background: #0284c7;">
@@ -340,7 +333,6 @@
     </div>
   </div>
 
-  <!-- 1. मुख्य जॉब फ़ॉर्म मॉडल -->
   <div id="jobModal" class="modal-overlay">
     <div class="modal-box">
       <div class="modal-header">
@@ -354,7 +346,6 @@
 
       <div class="modal-body">
         <form id="jobForm" onsubmit="saveJobRecord(event)">
-          <!-- जॉब टाइप सेलेक्टर -->
           <div class="job-type-selector" id="jobTypeSelector">
             <div class="job-type-btn active" id="jtBtn-REPAIR" onclick="setJobCategory('REPAIR')">🛠️ दुकान रिपेयरिंग</div>
             <div class="job-type-btn" id="jtBtn-VISIT" onclick="setJobCategory('VISIT')">🏠 होम विज़िट</div>
@@ -362,7 +353,6 @@
           </div>
           <input type="hidden" id="jobCategory" value="REPAIR">
 
-          <!-- जॉब नंबर और कस्टमर ID बार -->
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; flex-wrap: wrap;">
             <div style="display: flex; gap: 8px; align-items: center;">
               <span style="font-weight: 900; color: #0369a1; font-size: 1.15rem;" id="displayJobCode">#1315</span>
@@ -378,7 +368,6 @@
             </div>
           </div>
 
-          <!-- 📅 आने की तारीख (IN) एवं डिलीवरी तारीख (OUT) बार -->
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 4px;">
@@ -394,7 +383,6 @@
               </div>
             </div>
 
-            <!-- 📤 डिलीवरी तारीख (OUT DATE) -->
             <div id="outDateRowContainer" style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
               <div style="display: flex; align-items: center; gap: 4px;">
                 <span style="font-size: 0.82rem; font-weight: 800; color: #15803d;">📤 सामान डिलीवर तारीख (OUT):</span>
@@ -513,7 +501,6 @@
     </div>
   </div>
 
-  <!-- स्टॉक मॉडल -->
   <div id="stockModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 440px;">
       <div class="modal-header" style="background: #2563eb;">
@@ -543,7 +530,6 @@
     </div>
   </div>
 
-  <!-- ट्रैश बिन मॉडल -->
   <div id="trashModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 750px;">
       <div class="modal-header" style="background: #7c3aed;">
@@ -574,7 +560,6 @@
     </div>
   </div>
 
-  <!-- क्विक पेमेंट मॉडल -->
   <div id="quickPayModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 380px;">
       <div class="modal-header" style="background: #10b981;">
@@ -619,7 +604,6 @@
     </div>
   </div>
 
-  <!-- रसीद मॉडल -->
   <div id="receiptModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 480px; text-align: center;">
       <div class="modal-header" style="background: #0f766e; justify-content: center;">
@@ -648,7 +632,6 @@
     </div>
   </div>
 
-  <!-- त्वरित स्थिति मॉडल -->
   <div id="statusModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 490px;">
       <div class="modal-header" style="background: #0f766e; padding: 10px 14px;">
@@ -729,7 +712,6 @@
     </div>
   </div>
 
-  <!-- ग्राहक प्रोफ़ाइल मॉडल (लाइफ़टाइम खाता सारांश सहित) -->
   <div id="customerModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 460px;">
       <div class="modal-header">
@@ -746,7 +728,6 @@
             <input type="hidden" id="editCustId">
           </div>
 
-          <!-- 📊 लाइफ़टाइम खाता सारांश कार्ड -->
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px;">
             <div style="font-size: 0.8rem; font-weight: 900; color: #0f766e; margin-bottom: 6px;">📊 ग्राहक खाता सारांश (LIFETIME SUMMARY):</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; text-align: center;">
@@ -784,20 +765,16 @@
     </div>
   </div>
 
-  <!-- 🌟 सम्पूर्ण जॉब कार्ड हब (आकर्षक हेडर व आउट डेट सहित) -->
   <div id="jobDetailHubModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 580px;">
       <div class="modal-header">
-        <div id="hubModalTitleArea" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <!-- गोल्डन बैज और शीर्षक जावास्क्रिप्ट से बनेगा -->
-        </div>
+        <div id="hubModalTitleArea" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"></div>
         <button type="button" onclick="closeJobDetailHub()" style="background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; font-weight: bold; line-height: 1;">✕</button>
       </div>
       <div class="modal-body" id="hubModalBody"></div>
     </div>
   </div>
 
-  <!-- ग्राहक स्टेटमेंट मॉडल -->
   <div id="statementModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 800px;">
       <div class="modal-header">
@@ -894,7 +871,6 @@
       return clean.length >= 10 ? clean.slice(-10) : clean;
     }
 
-    // 📱 नया सामान लेते समय 10 अंक का नंबर डालते ही सही पुराना खाता ढूँढना
     function handlePhoneInputAutoMatch() {
       if (isEditMode) return;
       var ph = document.getElementById('custPhone').value.replace(/[^0-9]/g, '');
@@ -922,7 +898,7 @@
       }
     }, { passive: false });
 
-    // बैकड्रॉप टच
+    // बैकड्रॉप टच सुरक्षा (Ghost Click Protection - 1200ms)
     window.addEventListener('click', function(e) {
       var topMenu = document.getElementById('topDropdownMenu');
       var topBtn = document.getElementById('topMenuTriggerBtn');
@@ -941,8 +917,7 @@
       }
 
       if (e.target && e.target.classList && e.target.classList.contains('modal-overlay')) {
-        // 🛡️ पॉपअप तुरंत खुलने पर होने वाले घोस्ट क्लिक को ब्लॉक करें
-        if (Date.now() - lastModalOpenTime < 1000) return;
+        if (Date.now() - lastModalOpenTime < 1200) return; // 🛡️ यहाँ समय 1200ms कर दिया गया है
         e.target.style.display = 'none';
         if (e.target.id === 'statementModal') activeStatementCustId = '';
       }
@@ -1442,7 +1417,6 @@
 
     function closeQuickPayModal() { document.getElementById('quickPayModal').style.display = 'none'; }
 
-    // 🔒 क्विक पेमेंट / रिफंड (स्टेटस हमेशा सुरक्षित रहेगा - 'KEEP')
     function submitQuickPay(e) {
       e.preventDefault();
       var pin = getAuthorizedPin("पैसे जमा करें");
@@ -1454,7 +1428,7 @@
       var data = {
         code: document.getElementById('qpJobCode').value.trim(),
         customerId: document.getElementById('qpCustId').value.trim(),
-        status: 'KEEP', // ⚡ स्टेटस कभी नहीं बदलेगा
+        status: 'KEEP',
         paidNow: document.getElementById('qpAmount').value.trim(),
         mode: document.getElementById('qpPayMode').value
       };
@@ -1768,7 +1742,6 @@
 
     function closeJobModal() { document.getElementById('jobModal').style.display = 'none'; }
 
-    // ⚡ जॉब एडिट फ़ंक्शन (एडमिन के लिए आउट डेट संपादन व स्टाफ़ के लिए 100% फ़्रीज़)
     function editJobFromBadge(code) {
       if (!code) return;
       var cleanCode = code.toString().replace(/[^0-9a-zA-Z]/g, '').trim();
@@ -1845,7 +1818,6 @@
 
       var isOutJob = (curStatus === 'DELIVERED' || curStatus === 'RETURN');
 
-      // 🛡️ स्टाफ़ (2580) के लिए नियम
       if (pin === "2580") {
         if (isOutJob) {
           var allInputs = document.querySelectorAll('#jobModal input, #jobModal textarea, #jobModal select');
@@ -1901,7 +1873,6 @@
           document.getElementById('itemStatus').style.background = '#fffbeb';
         }
       } else {
-        // एडमिन (4455) के लिए सब कुछ अनलॉक (IN और OUT दोनों तारीखें कैलेंडर सहित)
         unlockJobFormFields();
         document.getElementById('jobSubmitBtn').style.display = 'block';
       }
@@ -1997,7 +1968,6 @@
       var deposit = !isEditMode ? parseFloat(document.getElementById('initialDeposit').value || '0') : 0;
       var finalPaid = isEditMode ? (oldRec ? parseFloat(oldRec.paid || 0) : 0) : deposit;
       
-      // 📤 आउट डेट: एडमिन द्वारा डाली गई या पुरानी / वर्तमान समय
       var enteredOutDate = document.getElementById('outDateTime') ? document.getElementById('outDateTime').value.trim() : '';
       var finalOutDate = '';
       if (stat === 'DELIVERED' || stat === 'RETURN') {
@@ -2353,7 +2323,7 @@
 
     function openStatement(custId) {
       if (!custId) return;
-      lastModalOpenTime = Date.now(); // 🛡️ घोस्ट क्लिक से बचाने के लिए टाइमर सेट करें
+      lastModalOpenTime = Date.now(); // 🛡️ यहाँ टाइमर सुरक्षित रूप से सेट किया गया है
       activeStatementCustId = custId;
       var custRecords = [];
       for (var i = 0; i < allRecords.length; i++) {
@@ -2573,7 +2543,6 @@
         .updateQuickStatus(data, pin);
     }
 
-    // 📋 जॉब कार्ड विवरण हब (शानदार हेडर + स्पष्ट आउट डेट)
     function openJobDetailHub(code) {
       if (!code) return;
       var cleanCode = code.toString().replace(/[^0-9a-zA-Z]/g, '').trim();
@@ -2608,7 +2577,6 @@
       else if (s === 'HOLD') { statusText = '⏸️ HOLD (होल्ड)'; statusBg = '#dc2626'; }
       else if (s === 'RETURN') { statusText = '🔄 RETURN (वापस)'; statusBg = '#475569'; }
 
-      // 🌟 नया हेडर लुक: सुनहरे चमकदार बॉक्स में जॉब नंबर सबसे पहले + शीर्षक
       document.getElementById('hubModalTitleArea').innerHTML = '' +
         '<span style="background: #fef08a; color: #854d0e; padding: 4px 12px; border-radius: 8px; font-weight: 950; font-size: 1.25rem; letter-spacing: 0.5px; border: 2px solid #eab308; box-shadow: 0 2px 5px rgba(0,0,0,0.25); display: inline-flex; align-items: center;">' +
           '#' + r.code +
@@ -2628,7 +2596,6 @@
         '</div>';
       }
 
-      // 📤 स्पष्ट डिलीवरी तारीख (OUT DATE)
       var datesSectionHtml = '<div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.88rem; color: #334155;">' +
         '<div style="margin-bottom: 4px;"><b>📥 सामान आने की तारीख (IN):</b> <span style="font-weight: 800; color: #0f172a;">' + (r.inDate || '-') + '</span></div>' +
         (isOut ? ('<div><b>📤 सामान डिलीवरी तारीख (OUT):</b> <span style="font-weight: 900; color: #0f766e; background: #f0fdfa; padding: 2px 6px; border-radius: 4px; border: 1px solid #99f6e4;">' + (r.outDate || 'तारीख दर्ज नहीं') + '</span></div>') : '') +
@@ -2640,7 +2607,8 @@
           '<button type="button" class="btn" style="background: #10b981; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); openQuickPayModalFromCard(\'' + r.code + '\')">💵 पैसे जमा करें</button>' +
           '<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px;" onclick="printSpecificJob(\'' + r.code + '\')">🖨️ पक्का बिल प्रिंट</button>' +
           '<button type="button" class="btn" style="background: #0284c7; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editJobFromBadge(\'' + r.code + '\')">✏️ जॉब एडिट करें</button>' +
-          '<button type="button" class="btn" style="background: #f59e0b; font-size: 0.9rem; padding: 10px; color: #78350f;" onclick="event.stopPropagation(); closeJobDetailHub(); openStatement(\'' + r.customerId + '\')">📄 ग्राहक खाता</button>' +
+          // 🛡️ यहाँ क्लिक प्रिवेंट और स्टॉप प्रोपगेशन जोड़ दिया गया है ताकि पॉपअप बंद न हो
+          '<button type="button" class="btn" style="background: #f59e0b; font-size: 0.9rem; padding: 10px; color: #78350f;" onclick="event.stopPropagation(); event.preventDefault(); closeJobDetailHub(); openStatement(\'' + r.customerId + '\')">📄 ग्राहक खाता</button>' +
           '<button type="button" class="btn" style="background: #8b5cf6; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editCustomerFromBadge(\'' + r.customerId + '\')">👤 ग्राहक प्रोफ़ाइल</button>' +
           '<button type="button" class="btn" style="background: #0f766e; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); repeatCustomer(' + origIdx + ')">➕ नया सामान जोड़ें</button>' +
           '<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px; grid-column: span 2;" onclick="applySameReturnFromHub(\'' + r.code + '\')">🔄 सेम रिटर्न (RETURN बिना काम)</button>' +
