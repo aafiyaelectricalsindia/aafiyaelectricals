@@ -5,48 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AAFIYA ELECTRICALS - REPAIRING & INVENTORY</title>
   
-  <!-- 🌐 GitHub से Google Sheet से बात करने का जादुई ब्रिज कोड -->
+  <!-- 🌐 GitHub से Google Sheet से बात करने का सुधरा हुआ जादुई ब्रिज कोड -->
   <script>
-    // ⚠️ आपका असली Web App URL
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
+
+    function callBackend(prop, args, successCallback, failCallback) {
+      let getActions = ['getSheetData', 'checkDataVersion', 'getCustomerPassbook'];
+      let url = new URL(WEB_APP_URL);
+      
+      if (getActions.includes(prop)) {
+        url.searchParams.append('action', prop);
+        if (prop === 'getSheetData') url.searchParams.append('pin', args[0]);
+        else if (prop === 'checkDataVersion') url.searchParams.append('clientVersion', args[0]);
+        else if (prop === 'getCustomerPassbook') url.searchParams.append('custId', args[0]);
+      } else {
+        let payload = { action: prop, data: args[0], pin: args[1] };
+        if (prop === 'deleteRecordFromSheet') {
+          payload.data = { code: args[0], flag: args[1] }; payload.pin = args[2];
+        } else if (prop === 'restoreRecordFromTrash') {
+          payload.data = { code: args[0] }; payload.pin = args[1];
+        }
+        url.searchParams.append('action', prop);
+        url.searchParams.append('payload', JSON.stringify(payload));
+      }
+      
+      fetch(url.toString())
+        .then(res => res.json())
+        .then(data => {
+          if (successCallback) successCallback(data);
+        })
+        .catch(err => {
+          if (failCallback) failCallback(err);
+          else console.error(err);
+        });
+    }
 
     const google = {
       script: {
         run: {
           withSuccessHandler: function(successCallback) {
-            return {
+            let helper = {
               withFailureHandler: function(failCallback) {
                 return new Proxy({}, {
                   get: function(target, prop) {
                     return function(...args) {
-                      let getActions = ['getSheetData', 'checkDataVersion', 'getCustomerPassbook'];
-                      let url = new URL(WEB_APP_URL);
-                      
-                      if (getActions.includes(prop)) {
-                        url.searchParams.append('action', prop);
-                        if (prop === 'getSheetData') url.searchParams.append('pin', args[0]);
-                        else if (prop === 'checkDataVersion') url.searchParams.append('clientVersion', args[0]);
-                        else if (prop === 'getCustomerPassbook') url.searchParams.append('custId', args[0]);
-                      } else {
-                        let payload = { action: prop, data: args[0], pin: args[1] };
-                        if (prop === 'deleteRecordFromSheet') {
-                          payload.data = { code: args[0], flag: args[1] }; payload.pin = args[2];
-                        } else if (prop === 'restoreRecordFromTrash') {
-                          payload.data = { code: args[0] }; payload.pin = args[1];
-                        }
-                        url.searchParams.append('action', prop);
-                        url.searchParams.append('payload', JSON.stringify(payload));
-                      }
-                      
-                      fetch(url.toString())
-                        .then(res => res.json())
-                        .then(data => successCallback(data))
-                        .catch(err => { if (failCallback) failCallback(err); else console.error(err); });
+                      callBackend(prop, args, successCallback, failCallback);
                     };
                   }
                 });
               }
             };
+            return new Proxy(helper, {
+              get: function(target, prop) {
+                if (prop in target) return target[prop];
+                return function(...args) {
+                  callBackend(prop, args, successCallback, null);
+                };
+              }
+            });
           }
         }
       }
@@ -618,7 +634,7 @@
           <div style="margin-bottom: 6px;"><b>📞 मोबाइल:</b> <span id="receiptCustPhone" style="font-weight: 900; color: #0284c7;">-</span></div>
           <div style="margin-bottom: 6px;"><b>⚡ सामान / कार्य:</b> <span id="receiptItem">-</span></div>
           <div style="margin-bottom: 6px;" id="receiptSerialRow"><b>🔢 सीरियल नंबर:</b> <span id="receiptSerial">-</span></div>
-          <div style="margin-bottom: 6px;"><b>🛠️ काम / समस्या:</b> <span id="receiptWork">-</span></div>
+          <div style="margin-bottom: 6px;" id="receiptSerialRow"><b>🛠️ काम / समस्या:</b> <span id="receiptWork">-</span></div>
           <div style="margin-bottom: 6px;"><b>📥 तारीख:</b> <span id="receiptInDate">-</span></div>
           <div id="receiptDepositRow" style="color: #15803d; font-weight: 800;"></div>
         </div>
@@ -850,7 +866,7 @@
     var activeStatementCustId = '';
     var lastSavedRecord = null;
     var activeQsRecord = null;
-    var lastModalOpenTime = 0; // 🛡️ घोस्ट क्लिक से सुरक्षा के लिए टाइमर
+    var lastModalOpenTime = 0;
 
     var AUTO_LOGOUT_SECONDS = 15 * 60;
     var remainingSeconds = AUTO_LOGOUT_SECONDS;
@@ -917,7 +933,7 @@
       }
 
       if (e.target && e.target.classList && e.target.classList.contains('modal-overlay')) {
-        if (Date.now() - lastModalOpenTime < 1200) return; // 🛡️ यहाँ समय 1200ms कर दिया गया है
+        if (Date.now() - lastModalOpenTime < 1200) return;
         e.target.style.display = 'none';
         if (e.target.id === 'statementModal') activeStatementCustId = '';
       }
@@ -2323,7 +2339,7 @@
 
     function openStatement(custId) {
       if (!custId) return;
-      lastModalOpenTime = Date.now(); // 🛡️ यहाँ टाइमर सुरक्षित रूप से सेट किया गया है
+      lastModalOpenTime = Date.now();
       activeStatementCustId = custId;
       var custRecords = [];
       for (var i = 0; i < allRecords.length; i++) {
@@ -2607,7 +2623,7 @@
           '<button type="button" class="btn" style="background: #10b981; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); openQuickPayModalFromCard(\'' + r.code + '\')">💵 पैसे जमा करें</button>' +
           '<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px;" onclick="printSpecificJob(\'' + r.code + '\')">🖨️ पक्का बिल प्रिंट</button>' +
           '<button type="button" class="btn" style="background: #0284c7; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editJobFromBadge(\'' + r.code + '\')">✏️ जॉब एडिट करें</button>' +
-          // 🛡️ यहाँ क्लिक प्रिवेंट और स्टॉप प्रोपगेशन जोड़ दिया गया है ताकि पॉपअप बंद न हो
+          // 🛡️ सुरक्षित क्लिक हैंडलर
           '<button type="button" class="btn" style="background: #f59e0b; font-size: 0.9rem; padding: 10px; color: #78350f;" onclick="event.stopPropagation(); event.preventDefault(); closeJobDetailHub(); openStatement(\'' + r.customerId + '\')">📄 ग्राहक खाता</button>' +
           '<button type="button" class="btn" style="background: #8b5cf6; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editCustomerFromBadge(\'' + r.customerId + '\')">👤 ग्राहक प्रोफ़ाइल</button>' +
           '<button type="button" class="btn" style="background: #0f766e; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); repeatCustomer(' + origIdx + ')">➕ नया सामान जोड़ें</button>' +
