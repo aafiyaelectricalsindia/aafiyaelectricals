@@ -286,7 +286,7 @@
           <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
           <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
           
-          <!-- वारंटी व डिलीवर केवल एडमिन (1050) को दिखेंगे -->
+          <!-- वारंटी व डिलीवर केवल एडमिन (4455) को दिखेंगे -->
           <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
           <div class="menu-item mi-delivered" id="menuItem-DELIVERED" onclick="selectTopFilter('DELIVERED')"><span>📦 डिलीवर</span> <span class="menu-count" id="count-DELIVERED">0</span></div>
           
@@ -1009,13 +1009,13 @@
 
       if (!pin) { err.innerText = 'कृपया पिन दर्ज करें!'; err.style.display = 'block'; return; }
 
-      if (pin === "2580" || pin === "1050") {
+      if (pin === "2581" || pin === "4455") {
         err.style.display = 'none';
         activePin = pin;
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('mainApp').style.display = 'block';
 
-        if (pin === "1050") {
+        if (pin === "4455") {
           document.getElementById('adminTrashMenuItem').style.display = 'flex';
           document.getElementById('menuItem-WARRANTY').style.display = 'flex';
           document.getElementById('menuItem-DELIVERED').style.display = 'flex';
@@ -1049,10 +1049,10 @@
     }
 
     function getAuthorizedPin(actionDescription) {
-      if (activePin === "1050" || activePin === "2580") return activePin;
+      if (activePin === "4455" || activePin === "2581") return activePin;
       var entered = prompt("🔐 सुरक्षा जाँच (पिन दर्ज करें):", "");
       if (!entered) return null;
-      if (entered !== "1050" && entered !== "2580") { alert("❌ गलत पिन!"); return null; }
+      if (entered !== "4455" && entered !== "2581") { alert("❌ गलत पिन!"); return null; }
       return entered;
     }
 
@@ -1293,7 +1293,7 @@
     function openTrashModal() {
       var m = document.getElementById('topDropdownMenu');
       if (m) m.style.display = 'none';
-      if (activePin !== "1050") { alert("❌ केवल मालिक ही ट्रैश देख सकते हैं।"); return; }
+      if (activePin !== "4455") { alert("❌ केवल मालिक ही ट्रैश देख सकते हैं।"); return; }
       var tbody = document.getElementById('trashTableBody');
       if (trashRecords.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:15px;">ट्रैश बिन खाली है।</td></tr>';
@@ -1745,7 +1745,7 @@
       document.getElementById('jobCode').value = autoNextJobCode;
       document.getElementById('jobSubmitBtn').style.display = 'block';
 
-      if (activePin === "1050") {
+      if (activePin === "4455") {
         document.getElementById('displayJobCode').style.display = 'none';
         document.getElementById('adminJobCodeWrapper').style.display = 'flex';
         document.getElementById('adminJobCodeInput').value = autoNextJobCode;
@@ -1845,8 +1845,8 @@
 
       var isOutJob = (curStatus === 'DELIVERED' || curStatus === 'RETURN');
 
-      // 🛡️ स्टाफ़ (2580) के लिए नियम
-      if (pin === "2580") {
+      // 🛡️ स्टाफ़ (2581) के लिए नियम
+      if (pin === "2581") {
         if (isOutJob) {
           var allInputs = document.querySelectorAll('#jobModal input, #jobModal textarea, #jobModal select');
           for (var idx = 0; idx < allInputs.length; idx++) {
@@ -1901,7 +1901,7 @@
           document.getElementById('itemStatus').style.background = '#fffbeb';
         }
       } else {
-        // एडमिन (1050) के लिए सब कुछ अनलॉक (IN और OUT दोनों तारीखें कैलेंडर सहित)
+        // एडमिन (4455) के लिए सब कुछ अनलॉक (IN और OUT दोनों तारीखें कैलेंडर सहित)
         unlockJobFormFields();
         document.getElementById('jobSubmitBtn').style.display = 'block';
       }
@@ -1944,7 +1944,7 @@
       var cat = document.getElementById('jobCategory').value;
 
       var adminInp = document.getElementById('adminJobCodeInput');
-      var jCode = (activePin === "1050" && !isEditMode && adminInp && adminInp.value.trim()) 
+      var jCode = (activePin === "4455" && !isEditMode && adminInp && adminInp.value.trim()) 
                     ? adminInp.value.trim() 
                     : document.getElementById('jobCode').value.trim();
       document.getElementById('jobCode').value = jCode;
@@ -2118,7 +2118,7 @@
 
       var curStat = r.status || 'DELIVERED';
 
-      if (activePin === "2580" && (curStat === 'DELIVERED' || curStat === 'RETURN')) {
+      if (activePin === "2581" && (curStat === 'DELIVERED' || curStat === 'RETURN')) {
         alert("⚠️ यह सामान डिलीवर (OUT) हो चुका है। इसकी स्थिति नहीं बदल सकती");
         return;
       }
@@ -2159,7 +2159,7 @@
       var warInp = document.getElementById('qsWarValue');
       var qsWarUnitEl = document.getElementById('qsWarUnit');
 
-      if (pin === "2580") {
+      if (pin === "2581") {
         compInp.readOnly = !!(r.components && r.components.trim());
         compInp.style.background = compInp.readOnly ? '#f1f5f9' : '#fff';
         billInp.readOnly = (parseFloat(r.bill || 0) > 0);
@@ -2303,7 +2303,7 @@
         statEl.style.color = '#15803d';
       }
 
-      if (pin === "2580") {
+      if (pin === "2581") {
         nameInp.readOnly = !!(r.name && r.name.trim());
         nameInp.style.background = nameInp.readOnly ? '#f1f5f9' : '#fff';
 
@@ -2509,7 +2509,7 @@
     }
 
     function deleteRecord(code) {
-      if (activePin !== "1050") {
+      if (activePin !== "4455") {
         alert("❌ अस्वीकृत: केवल मालिक ही रिकॉर्ड डिलीट कर सकते हैं।");
         return;
       }
@@ -2535,7 +2535,7 @@
           if (res && res.success) { alert('✅ रिकॉर्ड सफलतापूर्वक डिलीट कर दिया गया!'); fetchSheetData(); }
           else { alert('अस्वीकृत: ' + (res ? res.message : 'त्रुटि')); }
         })
-        .deleteRecordFromSheet(code, deletePayPrompt, "1050");
+        .deleteRecordFromSheet(code, deletePayPrompt, "4455");
     }
 
     function applySameReturnFromHub(code) {
@@ -2635,7 +2635,7 @@
       '</div>';
 
       var buttonsHtml = '';
-      if (activePin === '1050') {
+      if (activePin === '4455') {
         buttonsHtml = '' +
           '<button type="button" class="btn" style="background: #10b981; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); openQuickPayModalFromCard(\'' + r.code + '\')">💵 पैसे जमा करें</button>' +
           '<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px;" onclick="printSpecificJob(\'' + r.code + '\')">🖨️ पक्का बिल प्रिंट</button>' +
