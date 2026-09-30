@@ -40,6 +40,7 @@
 
     #mainApp { display: none; width: 100%; }
     
+    /* 📱 मोबाइल स्क्रीन के बिल्कुल लेवल में संतुलित टॉप बार */
     .top-nav-bar {
       display: flex; justify-content: space-between; align-items: center; gap: 4px;
       margin-bottom: 10px; padding: 2px 0; width: 100%;
@@ -67,6 +68,7 @@
       border-radius: 10px; font-size: 0.74rem; font-weight: 900;
     }
 
+    /* 🔄 रिफ़्रेश बटन स्टाइल */
     .btn-refresh {
       background: #f1f5f9; color: #0f766e; border: 1.5px solid #cbd5e1;
       padding: 6px 10px; border-radius: 7px; font-size: 0.84rem; font-weight: 900;
@@ -74,6 +76,7 @@
     }
     .btn-refresh:active { background: #e2e8f0; }
 
+    /* 🎨 बड़ा और टच-फ़्रेंडली रंग-बिरंगा मेन्यू */
     .top-dropdown-menu {
       position: absolute; right: 0; top: 110%; min-width: 235px;
       background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px;
@@ -201,6 +204,7 @@
 
   <!-- मुख्य ऐप स्क्रीन -->
   <div id="mainApp">
+    <!-- लाइन 1: AAFIYA ELECTRICALS | [➕ NEW] | [🔄 रिफ़्रेश] | [ड्रॉपडाउन मेन्यू] -->
     <div class="top-nav-bar">
       <div class="brand-title">AAFIYA ELECTRICALS</div>
       
@@ -221,6 +225,7 @@
           <span style="font-size: 0.75rem;">▼</span>
         </button>
 
+        <!-- रंग-बिरंगा मेन्यू -->
         <div id="topDropdownMenu" class="top-dropdown-menu" style="display: none;">
           <div style="padding: 6px 10px; font-size: 0.74rem; color: #64748b; font-weight: 900; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; margin-bottom: 4px;">
             ⏳ 15 MIN AUTO LOCK
@@ -232,7 +237,8 @@
           <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
           <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
           
-          <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
+          <!-- वारंटी व डिलीवर केवल एडमिन (4455) को दिखेंगे -->
+          <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
           <div class="menu-item mi-delivered" id="menuItem-DELIVERED" onclick="selectTopFilter('DELIVERED')"><span>📦 डिलीवर</span> <span class="menu-count" id="count-DELIVERED">0</span></div>
           
           <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
@@ -254,15 +260,18 @@
       </div>
     </div>
 
+    <!-- लाइन 2: सर्च बार -->
     <div style="margin-bottom: 10px;">
       <input type="text" id="searchInput" class="search-box" placeholder="🔍 कोड, ID, ग्राहक, मोबाइल, सामान से खोजें..." onkeyup="searchRecords()">
       <div id="searchStats" style="font-size: 0.8rem; color: #64748b; font-weight: 800; padding: 0 2px;"></div>
     </div>
 
+    <!-- लाइन 3: ग्राहक जॉब कार्ड्स -->
     <div id="loader">🔄 GOOGLE SHEET से डेटा लोड हो रहा है...</div>
     <div id="resultsArea"></div>
   </div>
 
+  <!-- छूटे हुए जॉब कोड्स मॉडल -->
   <div id="missingCodesModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header" style="background: #0284c7;">
@@ -281,6 +290,7 @@
     </div>
   </div>
 
+  <!-- 1. मुख्य जॉब फ़ॉर्म मॉडल -->
   <div id="jobModal" class="modal-overlay">
     <div class="modal-box">
       <div class="modal-header">
@@ -294,13 +304,15 @@
 
       <div class="modal-body">
         <form id="jobForm" onsubmit="saveJobRecord(event)">
+          <!-- जॉब टाइप सेलेक्टर -->
           <div class="job-type-selector" id="jobTypeSelector">
-            <div class="job-type-btn active" id="jtBtn-REPAIR" onclick="setJobCategory('REPAIR')">🛠️ दुकान रिपेयरिंग</div>
+            <div class="job-type-btn active" id="jtBtn-REPAIR" onclick="setJobCategory('REPAIR')">🛠️️ दुकान रिपेयरिंग</div>
             <div class="job-type-btn" id="jtBtn-VISIT" onclick="setJobCategory('VISIT')">🏠 होम विज़िट</div>
             <div class="job-type-btn" id="jtBtn-SALE" onclick="setJobCategory('SALE')">🏷️ नया सामान सेल (वारंटी)</div>
           </div>
           <input type="hidden" id="jobCategory" value="REPAIR">
 
+          <!-- जॉब नंबर और कस्टमर ID बार -->
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; flex-wrap: wrap;">
             <div style="display: flex; gap: 8px; align-items: center;">
               <span style="font-weight: 900; color: #0369a1; font-size: 1.15rem;" id="displayJobCode">#1315</span>
@@ -316,6 +328,7 @@
             </div>
           </div>
 
+          <!-- 📅 आने की तारीख (IN) एवं डिलीवरी तारीख (OUT) बार -->
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 4px;">
@@ -331,6 +344,7 @@
               </div>
             </div>
 
+            <!-- 📤 डिलीवरी तारीख (OUT DATE) -->
             <div id="outDateRowContainer" style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
               <div style="display: flex; align-items: center; gap: 4px;">
                 <span style="font-size: 0.82rem; font-weight: 800; color: #15803d;">📤 सामान डिलीवर तारीख (OUT):</span>
@@ -377,7 +391,7 @@
           </div>
 
           <div id="jobHoldReasonGroup" class="form-group" style="display: none; background: #faf5ff; border: 1.5px solid #c084fc; padding: 8px 10px; border-radius: 6px;">
-            <label style="color: #7e22ce; font-weight: 800;">⏸️ होल्ड पर रखने की वजह (REASON):</label>
+            <label style="color: #7e22ce; font-weight: 800;">⏸️️ होल्ड पर रखने की वजह (REASON):</label>
             <input type="text" id="jobHoldReason" placeholder="उदा. IC मंगाना बाकी है" oninput="this.value = this.value.toUpperCase();">
           </div>
 
@@ -449,6 +463,7 @@
     </div>
   </div>
 
+  <!-- स्टॉक मॉडल -->
   <div id="stockModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 440px;">
       <div class="modal-header" style="background: #2563eb;">
@@ -478,6 +493,7 @@
     </div>
   </div>
 
+  <!-- ट्रैश बिन मॉडल -->
   <div id="trashModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 750px;">
       <div class="modal-header" style="background: #7c3aed;">
@@ -508,6 +524,7 @@
     </div>
   </div>
 
+  <!-- क्विक पेमेंट मॉडल -->
   <div id="quickPayModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 380px;">
       <div class="modal-header" style="background: #10b981;">
@@ -542,9 +559,10 @@
             </select>
           </div>
 
+          <!-- 📝 पेमेंट के साथ नोट्स (Remarks) लिखने का नया बॉक्स -->
           <div class="form-group" style="margin-bottom: 10px;">
-            <label style="color: #065f46; font-weight: 900; font-size: 0.85rem;">📝 नोट / रिमार्क (वैकल्पिक):</label>
-            <input type="text" id="qpNote" placeholder="उदा. पुराना सामान एडजस्ट किया" style="font-weight: 700; background: #fff;" oninput="this.value = this.value.toUpperCase();">
+            <label style="color: #065f46; font-weight: 900; font-size: 0.85rem;">📝 पेमेंट नोट / रिमार्क (वैकल्पिक):</label>
+            <input type="text" id="qpNote" placeholder="उदा. पुराना सामान एडजस्ट किया" style="font-weight: 700; background: #ffffff;" oninput="this.value = this.value.toUpperCase();">
           </div>
 
           <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 8px 10px; border-radius: 6px; margin-bottom: 12px; text-align: center;">
@@ -557,6 +575,7 @@
     </div>
   </div>
 
+  <!-- रसीद मॉडल -->
   <div id="receiptModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 480px; text-align: center;">
       <div class="modal-header" style="background: #0f766e; justify-content: center;">
@@ -586,28 +605,30 @@
     </div>
   </div>
 
+  <!-- 📲 WhatsApp प्रिव्यू मॉडल (संदेश भेजने से पहले पुष्टि) -->
   <div id="whatsappModal" class="modal-overlay">
-    <div class="modal-box" style="max-width: 460px;">
+    <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header" style="background: #25d366;">
         <div style="display: flex; align-items: center; gap: 8px;">
           <span>📲</span>
           <h2 style="font-size: 1.1rem; color: white; margin: 0; font-weight: 900;">WHATSAPP संदेश प्रिव्यू</h2>
         </div>
-        <button onclick="closeWhatsappModal()" style="background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; font-weight: bold;">✕</button>
+        <button type="button" onclick="closeWhatsappModal()" style="background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; font-weight: bold; line-height: 1;">✕</button>
       </div>
       <div class="modal-body">
-        <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 8px; font-weight: 800;">
-          यह पेशेवर संदेश ग्राहक को भेजा जाएगा:
+        <div style="font-size: 0.82rem; color: #475569; margin-bottom: 8px; font-weight: 800;">
+          ग्राहक को भेजा जाने वाला संदेश (आप चाहें तो इसमें बदलाव भी कर सकते हैं):
         </div>
-        <textarea id="whatsappMsgText" rows="8" style="width: 100%; font-size: 0.9rem; font-weight: 700; background: #f0fdf4; border: 1.5px solid #25d366; border-radius: 6px; padding: 10px; margin-bottom: 12px;"></textarea>
+        <textarea id="whatsappMsgText" rows="8" style="width: 100%; font-size: 0.92rem; font-weight: 700; background: #f0fdf4; border: 1.5px solid #25d366; border-radius: 6px; padding: 10px; margin-bottom: 12px; font-family: monospace;"></textarea>
         <div style="display: flex; gap: 8px;">
           <button type="button" class="btn" style="background: #25d366; flex: 1;" onclick="sendFinalWhatsApp()">📲 WhatsApp पर भेजें</button>
-          <button type="button" class="btn btn-cancel" style="flex: 1;" onclick="closeWhatsappModal()">बंद करें</button>
+          <button type="button" class="btn btn-cancel" style="flex: 1; margin-top: 0;" onclick="closeWhatsappModal()">रद्द करें (बंद करें)</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- त्वरित स्थिति मॉडल -->
   <div id="statusModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 490px;">
       <div class="modal-header" style="background: #0f766e; padding: 10px 14px;">
@@ -688,6 +709,7 @@
     </div>
   </div>
 
+  <!-- ग्राहक प्रोफ़ाइल मॉडल -->
   <div id="customerModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 460px;">
       <div class="modal-header">
@@ -741,6 +763,7 @@
     </div>
   </div>
 
+  <!-- सम्पूर्ण जॉब कार्ड हब -->
   <div id="jobDetailHubModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 580px;">
       <div class="modal-header">
@@ -751,6 +774,7 @@
     </div>
   </div>
 
+  <!-- ग्राहक स्टेटमेंट मॉडल -->
   <div id="statementModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 800px;">
       <div class="modal-header">
@@ -784,7 +808,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
             <button type="button" class="btn" id="stmtNewJobBtn" style="width: auto; padding: 8px 12px; background: #0f766e; font-size: 0.9rem;">➕ नया सामान</button>
-            <button type="button" class="btn" style="width: auto; padding: 8px 12px; background: #2563eb; font-size: 0.9rem;" onclick="printStatement()">🖨️ प्रिंट</button>
+            <button type="button" class="btn" style="width: auto; padding: 8px 12px; background: #2563eb; font-size: 0.9rem;" onclick="printStatement()">🖨️️ प्रिंट</button>
           </div>
           <button type="button" class="btn" style="width: auto; padding: 8px 14px; background: #25d366; font-size: 0.9rem;" onclick="sendStatementWhatsApp()">📲 WHATSAPP पर भेजें</button>
         </div>
@@ -814,9 +838,115 @@
   </datalist>
 
   <script>
-    // ⚡ आपका सटीक Google Apps Script Web App URL सेट किया गया है
-    var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
+    // ==============================================================================================
+    // 🔗 1. गूगल ऐप्स स्क्रिप्ट वेब ऐप यूआरएल (यहाँ आपका लिंक सबसे ऊपर लगा दिया गया है):
+    // ----------------------------------------------------------------------------------------------
+    // यह वही लिंक है जहाँ से आपका सारा डेटा (Google Sheet) आता और जाता है।
+    // उदाहरण: "https://script.google.com/macros/s/AKfycby.../exec"
+    // ==============================================================================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
 
+    // ==============================================================================================
+    // 🌐 2. GitHub Pages को Google Apps Script से जोड़ने वाला ऑटो-ब्रिज (Shim):
+    // ----------------------------------------------------------------------------------------------
+    // यह हिस्सा आपके GitHub पेज पर google.script.run को चालू रखता है ताकि आपका पूरा पुराना कोड
+    // बिना किसी बदलाव के सीधे Google Sheet से डेटा लोड कर सके और सुरक्षित सेव कर सके।
+    // ==============================================================================================
+    if (typeof google === 'undefined' || !google.script || !google.script.run) {
+      window.google = window.google || {};
+      window.google.script = window.google.script || {};
+
+      window.google.script.run = (function() {
+        function BridgeRunner(successHandler, failureHandler) {
+          this._success = successHandler || function() {};
+          this._failure = failureHandler || function(err) {
+            console.error("API Error:", err);
+            alert("सर्वर त्रुटि: " + (err.message || err));
+          };
+        }
+
+        BridgeRunner.prototype.withSuccessHandler = function(fn) {
+          return new BridgeRunner(fn, this._failure);
+        };
+
+        BridgeRunner.prototype.withFailureHandler = function(fn) {
+          return new BridgeRunner(this._success, fn);
+        };
+
+        BridgeRunner.prototype._callApi = function(action, params) {
+          var self = this;
+          var queryParts = ["action=" + encodeURIComponent(action)];
+          
+          for (var key in params) {
+            if (params.hasOwnProperty(key)) {
+              queryParts.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]));
+            }
+          }
+          
+          var fullUrl = GOOGLE_SCRIPT_URL + "?" + queryParts.join("&");
+
+          fetch(fullUrl)
+            .then(function(res) {
+              if (!res.ok) throw new Error("सर्वर से संपर्क नहीं हुआ (Status: " + res.status + ")");
+              return res.json();
+            })
+            .then(function(data) {
+              self._success(data);
+            })
+            .catch(function(err) {
+              self._failure(err);
+            });
+        };
+
+        BridgeRunner.prototype.getSheetData = function(pin) {
+          this._callApi('getSheetData', { pin: pin || '' });
+        };
+
+        BridgeRunner.prototype.getCustomerPassbook = function(custId) {
+          this._callApi('getCustomerPassbook', { custId: custId || '' });
+        };
+
+        BridgeRunner.prototype.checkDataVersion = function(clientVersion) {
+          this._callApi('checkDataVersion', { clientVersion: clientVersion || '' });
+        };
+
+        BridgeRunner.prototype.saveRecordToSheet = function(record, pin) {
+          var payload = JSON.stringify({ action: 'saveRecordToSheet', data: record, pin: pin });
+          this._callApi('saveRecordToSheet', { payload: payload });
+        };
+
+        BridgeRunner.prototype.updateQuickStatus = function(data, pin) {
+          var payload = JSON.stringify({ action: 'updateQuickStatus', data: data, pin: pin });
+          this._callApi('updateQuickStatus', { payload: payload });
+        };
+
+        BridgeRunner.prototype.updateCustomerProfile = function(custData, pin) {
+          var payload = JSON.stringify({ action: 'updateCustomerProfile', data: custData, pin: pin });
+          this._callApi('updateCustomerProfile', { payload: payload });
+        };
+
+        BridgeRunner.prototype.addNewStockToSheet = function(data, pin) {
+          var payload = JSON.stringify({ action: 'addNewStockToSheet', data: data, pin: pin });
+          this._callApi('addNewStockToSheet', { payload: payload });
+        };
+
+        BridgeRunner.prototype.deleteRecordFromSheet = function(code, flag, pin) {
+          var payload = JSON.stringify({ action: 'deleteRecordFromSheet', data: { code: code, flag: flag }, pin: pin });
+          this._callApi('deleteRecordFromSheet', { payload: payload });
+        };
+
+        BridgeRunner.prototype.restoreRecordFromTrash = function(code, pin) {
+          var payload = JSON.stringify({ action: 'restoreRecordFromTrash', data: { code: code }, pin: pin });
+          this._callApi('restoreRecordFromTrash', { payload: payload });
+        };
+
+        return new BridgeRunner();
+      })();
+    }
+
+    // ==============================================================================================
+    // 📊 3. मुख्य वैरिएबल्स और स्टेट (पूर्ववत सुरक्षित)
+    // ==============================================================================================
     var allRecords = [];
     var trashRecords = [];
     var currentFilter = 'ALL';
@@ -829,7 +959,7 @@
     var activeStatementCustId = '';
     var lastSavedRecord = null;
     var activeQsRecord = null;
-    var pendingWhatsappPhone = '';
+    var pendingWhatsappPhone = ''; // 📱 WhatsApp नंबर होल्ड करने के लिए
 
     var AUTO_LOGOUT_SECONDS = 15 * 60;
     var remainingSeconds = AUTO_LOGOUT_SECONDS;
@@ -837,49 +967,6 @@
 
     var masterItems = ["INVERTER", "BATTERY", "CEILING FAN", "COOLER / COOLER KIT", "STABILIZER", "WASHING MACHINE", "MIXER GRINDER", "PRESS / IRON", "MONOBLOCK MOTOR", "SUBMERSIBLE PUMP", "EXHAUST FAN", "GEYSER / WATER HEATER"];
     var masterBrands = ["MICROTEK", "LUMINOUS", "LIVGUARD", "EXIDE", "V-GUARD", "SU-KAM", "AMAZE", "ARISE", "EASTMAN", "GENUS", "OKAYA", "SUJATA", "MAHARAJA WHITELINE", "PHILIPS", "BAJAJ", "USHA", "CROMPTON", "HAVELLS", "ORIENT", "POLYCAB", "LG", "SAMSUNG", "WHIRLPOOL", "KIRLOSKAR", "LOCAL / ASSEMBLED"];
-
-    // ⚡ कस्टमाइज़्ड फेच फंक्शन (जो कभी नहीं अटकेगा और कैशे का इस्तेमाल करेगा)
-    function callBackend(action, data, callback, errorCallback) {
-      var url = WEB_APP_URL + "?action=" + action + "&pin=" + activePin;
-      if (data) {
-        url += "&payload=" + encodeURIComponent(JSON.stringify({ action: action, pin: activePin, data: data }));
-      }
-
-      // अगर पहली बार खुल रहा है और पुराना डेटा फोन में सेव है, तो तुरंत दिखाओ (सुपर-फास्ट लोड)
-      if (action === 'getSheetData' && !window._cacheLoaded) {
-        var cached = localStorage.getItem('AAF_CACHE_' + activePin);
-        if (cached) {
-          try {
-            var parsed = JSON.parse(cached);
-            window._cacheLoaded = true;
-            callback(parsed);
-          } catch(e) {}
-        }
-      }
-
-      fetch(url)
-        .then(function(res) { return res.json(); })
-        .then(function(res) {
-          if (action === 'getSheetData' && res && !res.error) {
-            localStorage.setItem('AAF_CACHE_' + activePin, JSON.stringify(res));
-          }
-          callback(res);
-        })
-        .catch(function(err) {
-          if (errorCallback) errorCallback(err);
-          else {
-            console.error(err);
-            // अगर नेटवर्क फेल हो, तो कम से कम कैशे डेटा से ऐप चलाओ ताकि अटके नहीं
-            if (action === 'getSheetData') {
-              var cached = localStorage.getItem('AAF_CACHE_' + activePin);
-              if (cached) {
-                try { callback(JSON.parse(cached)); return; } catch(e) {}
-              }
-            }
-            alert("⚠️ सर्वर से संपर्क नहीं हो पाया। कृपया इंटरनेट कनेक्शन जांचें।");
-          }
-        });
-    }
 
     function formatPhoneWith91(phone) {
       if (!phone) return '';
@@ -893,6 +980,7 @@
       return clean.length >= 10 ? clean.slice(-10) : clean;
     }
 
+    // 📱 नया सामान लेते समय 10 अंक का नंबर डालते ही सही पुराना खाता ढूँढना
     function handlePhoneInputAutoMatch() {
       if (isEditMode) return;
       var ph = document.getElementById('custPhone').value.replace(/[^0-9]/g, '');
@@ -920,6 +1008,7 @@
       }
     }, { passive: false });
 
+    // बैकड्रॉप टच
     window.addEventListener('click', function(e) {
       var topMenu = document.getElementById('topDropdownMenu');
       var topBtn = document.getElementById('topMenuTriggerBtn');
@@ -1268,13 +1357,19 @@
         serialNo: document.getElementById('stockSerialNo').value.trim().toUpperCase()
       };
 
-      callBackend('addNewStockToSheet', data, function(res) {
-        btn.disabled = false; btn.innerText = '📦 स्टॉक में सुरक्षित करें';
-        if (res && res.success) {
-          alert('✅ नया सीरियल नंबर स्टॉक में जुड़ गया!');
-          closeStockModal(); fetchSheetData();
-        } else { alert(res ? res.message : 'त्रुटि हुई'); }
-      });
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false; btn.innerText = '📦 स्टॉक में सुरक्षित करें';
+          if (res && res.success) {
+            alert('✅ नया सीरियल नंबर स्टॉक में जुड़ गया!');
+            closeStockModal(); fetchSheetData();
+          } else { alert(res ? res.message : 'त्रुटि हुई'); }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false; btn.innerText = '📦 स्टॉक में सुरक्षित करें';
+          alert('त्रुटि: ' + err.message);
+        })
+        .addNewStockToSheet(data, activePin);
     }
 
     function openTrashModal() {
@@ -1306,12 +1401,14 @@
 
     function restoreTrashRecord(code) {
       if (!confirm("क्या आप वाकई जॉब #" + code + " को रिस्टोर करना चाहते हैं?")) return;
-      callBackend('restoreRecordFromTrash', { code: code }, function(res) {
-        if (res && res.success) {
-          alert('✅ रिकॉर्ड सफलतापूर्वक रिस्टोर हो गया!');
-          closeTrashModal(); fetchSheetData();
-        } else { alert(res ? res.message : 'त्रुटि'); }
-      });
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.success) {
+            alert('✅ रिकॉर्ड सफलतापूर्वक रिस्टोर हो गया!');
+            closeTrashModal(); fetchSheetData();
+          } else { alert(res ? res.message : 'त्रुटि'); }
+        })
+        .restoreRecordFromTrash(code, activePin);
     }
 
     function openMissingCodesModal() {
@@ -1380,7 +1477,7 @@
       document.getElementById('qpCustInfo').innerText = r.name + ' (' + cid + ')';
       document.getElementById('qpTotalCustBalance').innerText = 'ग्राहक का कुल बकाया: ₹' + netBal;
       document.getElementById('qpAmount').value = '';
-      document.getElementById('qpNote').value = '';
+      document.getElementById('qpNote').value = ''; // 📝 नोट रीसेट
 
       document.getElementById('qpPayMode').value = 'CASH';
       handleQuickPayModeChange();
@@ -1428,6 +1525,7 @@
 
     function closeQuickPayModal() { document.getElementById('quickPayModal').style.display = 'none'; }
 
+    // 🔒 क्विक पेमेंट / रिफंड (नोट्स के साथ)
     function submitQuickPay(e) {
       e.preventDefault();
       var pin = getAuthorizedPin("पैसे जमा करें");
@@ -1436,38 +1534,51 @@
       var btn = document.getElementById('qpSubmitBtn');
       btn.disabled = true; btn.innerText = '⏳ जमा हो रहा है...';
 
+      var jCode = document.getElementById('qpJobCode').value.trim();
+      var cId = document.getElementById('qpCustId').value.trim();
+      var payAmt = document.getElementById('qpAmount').value.trim();
+      var payMode = document.getElementById('qpPayMode').value;
+      var payNote = document.getElementById('qpNote') ? document.getElementById('qpNote').value.trim().toUpperCase() : '';
+
       var data = {
-        code: document.getElementById('qpJobCode').value.trim(),
-        customerId: document.getElementById('qpCustId').value.trim(),
-        status: 'KEEP',
-        paidNow: document.getElementById('qpAmount').value.trim(),
-        mode: document.getElementById('qpPayMode').value,
-        note: document.getElementById('qpNote').value.trim().toUpperCase()
+        code: jCode,
+        customerId: cId,
+        status: 'KEEP', // ⚡ स्टेटस कभी नहीं बदलेगा
+        paidNow: payAmt,
+        mode: payMode,
+        note: payNote // 📝 नोट भेजा जा रहा है
       };
 
-      callBackend('updateQuickStatus', data, function(res) {
-        btn.disabled = false; btn.innerText = '✅ पेमेंट सुरक्षित करें';
-        if (res && res.success) {
-          alert('✅ पेमेंट सफलतापूर्वक दर्ज हो गई!');
-          closeQuickPayModal();
-          fetchSheetData();
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false; btn.innerText = '✅ पेमेंट सुरक्षित करें';
+          if (res && res.success) {
+            alert('✅ पेमेंट सफलतापूर्वक दर्ज हो गई!');
+            closeQuickPayModal();
+            fetchSheetData();
 
-          var recCode = document.getElementById('qpJobCode').value.trim();
-          var targetRec = null;
-          for(var x=0; x<allRecords.length; x++){
-            if(allRecords[x].code.toString().trim() === recCode){ targetRec = allRecords[x]; break; }
-          }
-          if(targetRec && targetRec.phone){
-            var payAmtVal = document.getElementById('qpAmount').value.trim();
-            var noteVal = document.getElementById('qpNote').value.trim();
-            var msgText = "*AAFIYA ELECTRICALS*\n" +
-                          "प्रिय " + targetRec.name + ",\n" +
-                          "आपके खाते में ₹" + payAmtVal + " की राशि प्राप्त / जमा कर ली गई है।" + (noteVal ? " (" + noteVal + ")" : "") + "\n" +
-                          "📞 8859623437";
-            openWhatsappModal(targetRec.phone, msgText);
-          }
-        } else { alert(res ? res.message : 'त्रुटि हुई'); }
-      });
+            // 📲 पेमेंट रसीद का WhatsApp प्रिव्यू
+            var targetRec = null;
+            for (var x = 0; x < allRecords.length; x++) {
+              if (allRecords[x].code.toString().trim() === jCode) { targetRec = allRecords[x]; break; }
+            }
+            if (targetRec && targetRec.phone) {
+              var noteText = payNote ? (" (" + payNote + ")") : "";
+              var msgText = "*AAFIYA ELECTRICALS*\n" +
+                            "प्रिय " + targetRec.name + ",\n" +
+                            "आपके खाते में ₹" + payAmt + " का भुगतान जमा कर लिया गया है" + noteText + "।\n" +
+                            "🔹 माध्यम: " + payMode + "\n" +
+                            "🔹 संदर्भ जॉब: #" + jCode + "\n" +
+                            "📞 संपर्क: 8859623437";
+              openWhatsappModal(targetRec.phone, msgText);
+            }
+          } else { alert(res ? res.message : 'त्रुटि हुई'); }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false; btn.innerText = '✅ पेमेंट सुरक्षित करें';
+          alert('त्रुटि: ' + err.message);
+        })
+        .updateQuickStatus(data, pin);
     }
 
     function printSpecificJob(code) {
@@ -1634,42 +1745,45 @@
       loader.style.display = 'block';
       loader.innerText = '🔄 GOOGLE SHEET से डेटा लोड हो रहा है...';
 
-      callBackend('getSheetData', null, function(res) {
-        loader.style.display = 'none';
-        if (res && res.error) { alert(res.error); logout(); return; }
-        allRecords = (res && res.records) ? res.records : [];
-        trashRecords = (res && res.trashList) ? res.trashList : [];
-        
-        allRecords.sort(function(a, b) { return (parseInt(b.code, 10) || 0) - (parseInt(a.code, 10) || 0); });
+      google.script.run
+        .withSuccessHandler(function(res) {
+          loader.style.display = 'none';
+          if (res && res.error) { alert(res.error); logout(); return; }
+          allRecords = (res && res.records) ? res.records : [];
+          trashRecords = (res && res.trashList) ? res.trashList : [];
+          
+          allRecords.sort(function(a, b) { return (parseInt(b.code, 10) || 0) - (parseInt(a.code, 10) || 0); });
 
-        autoNextJobCode = (res && res.nextCode) ? res.nextCode : 1315;
-        autoNextCustId = (res && res.nextCustId) ? res.nextCustId : 'C-1001';
+          autoNextJobCode = (res && res.nextCode) ? res.nextCode : 1315;
+          autoNextCustId = (res && res.nextCustId) ? res.nextCustId : 'C-1001';
 
-        if (res && res.uniqueItems) {
-          res.uniqueItems.forEach(function(it) {
-            if (it && masterItems.indexOf(it.toUpperCase()) === -1) masterItems.push(it.toUpperCase());
-          });
-        }
-        if (res && res.uniqueBrands) {
-          res.uniqueBrands.forEach(function(br) {
-            if (br && masterBrands.indexOf(br.toUpperCase()) === -1) masterBrands.push(br.toUpperCase());
-          });
-        }
-        populateDatalists();
+          if (res && res.uniqueItems) {
+            res.uniqueItems.forEach(function(it) {
+              if (it && masterItems.indexOf(it.toUpperCase()) === -1) masterItems.push(it.toUpperCase());
+            });
+          }
+          if (res && res.uniqueBrands) {
+            res.uniqueBrands.forEach(function(br) {
+              if (br && masterBrands.indexOf(br.toUpperCase()) === -1) masterBrands.push(br.toUpperCase());
+            });
+          }
+          populateDatalists();
 
-        computeCustomerLedgerMap();
-        updateFilterCounts();
-        searchRecords();
-        if (activeStatementCustId) openStatement(activeStatementCustId);
+          computeCustomerLedgerMap();
+          updateFilterCounts();
+          searchRecords();
+          if (activeStatementCustId) openStatement(activeStatementCustId);
 
-        var hubModal = document.getElementById('jobDetailHubModal');
-        if (hubModal && hubModal.style.display === 'flex') {
-          var activeHubCode = document.getElementById('hubModalTitleArea').getAttribute('data-active-code');
-          if (activeHubCode) openJobDetailHub(activeHubCode);
-        }
-      }, function(err) {
-        loader.innerText = 'डेटा लोड नहीं हो सका: ' + err.message;
-      });
+          var hubModal = document.getElementById('jobDetailHubModal');
+          if (hubModal && hubModal.style.display === 'flex') {
+            var activeHubCode = document.getElementById('hubModalTitleArea').getAttribute('data-active-code');
+            if (activeHubCode) openJobDetailHub(activeHubCode);
+          }
+        })
+        .withFailureHandler(function(err) {
+          loader.innerText = 'डेटा लोड नहीं हो सका: ' + err.message;
+        })
+        .getSheetData(activePin);
     }
 
     function updateFilterCounts() {
@@ -1979,7 +2093,7 @@
       if (stat === 'HOLD') {
         var hReason = document.getElementById('jobHoldReason').value.trim().toUpperCase();
         if (hReason && workText.indexOf('[⏸️') === -1) {
-          workText = workText ? (workText + ' [⏸️ HOLD: ' + hReason + ']') : ('[⏸️️ HOLD: ' + hReason + ']');
+          workText = workText ? (workText + ' [⏸️ HOLD: ' + hReason + ']') : ('[⏸️ HOLD: ' + hReason + ']');
         }
       }
 
@@ -2011,14 +2125,20 @@
       lastSavedRecord = record;
 
       var pinToSend = isEditMode ? editPinUsed : activePin;
-      callBackend('saveRecordToSheet', record, function(res) {
-        submitBtn.disabled = false; submitBtn.innerText = '💾 ऑनलाइन सुरक्षित करें';
-        if (res && res.success) {
-          closeJobModal(); fetchSheetData();
-          if (!isEditMode) showReceiptPopup(record);
-          else alert('जॉब सफलतापूर्वक अपडेट हो गया!');
-        } else { alert(res ? res.message : 'त्रुटि हुई'); }
-      });
+      google.script.run
+        .withSuccessHandler(function(res) {
+          submitBtn.disabled = false; submitBtn.innerText = '💾 ऑनलाइन सुरक्षित करें';
+          if (res && res.success) {
+            closeJobModal(); fetchSheetData();
+            if (!isEditMode) showReceiptPopup(record);
+            else alert('जॉब सफलतापूर्वक अपडेट हो गया!');
+          } else { alert(res ? res.message : 'त्रुटि हुई'); }
+        })
+        .withFailureHandler(function(err) {
+          submitBtn.disabled = false; submitBtn.innerText = '💾 ऑनलाइन सुरक्षित करें';
+          alert('त्रुटि: ' + err.message);
+        })
+        .saveRecordToSheet(record, pinToSend);
     }
 
     function showReceiptPopup(rec) {
@@ -2046,21 +2166,22 @@
     function openAnotherNewEntry() { closeReceiptModal(); openNewEntryModal(); }
 
     function triggerWhatsappFromReceipt() {
-      if(!lastSavedRecord) return;
+      if (!lastSavedRecord) return;
       closeReceiptModal();
       var rec = lastSavedRecord;
       var msg = "*AAFIYA ELECTRICALS*\n" +
                 "प्रिय " + rec.name + ",\n" +
                 "आपका " + rec.item + (rec.brand ? " (" + rec.brand + ")" : "") + " रिपेयरिंग के लिए दर्ज कर लिया गया है।\n" +
-                "🔹 जॉब कोड: #" + rec.code + "\n" +
+                "🔹 जॉब टोकन: #" + rec.code + "\n" +
                 "🔹 दिनांक: " + rec.inDate + "\n" +
-                "(सामान तैयार होने पर सूचना भेज दी जाएगी।)\n" +
-                "📞 8859623437";
+                (rec.paid > 0 ? ("🔹 एडवांस जमा: ₹" + rec.paid + "\n") : "") +
+                "(सामान तैयार होने पर आपको सूचित कर दिया जाएगा।)\n" +
+                "📞 संपर्क: 8859623437";
       openWhatsappModal(rec.phone, msg);
     }
 
     function openWhatsappModal(phone, text) {
-      if(!phone) {
+      if (!phone) {
         alert("ग्राहक का मोबाइल नंबर उपलब्ध नहीं है!");
         return;
       }
@@ -2075,7 +2196,7 @@
 
     function sendFinalWhatsApp() {
       var text = document.getElementById('whatsappMsgText').value;
-      if(!pendingWhatsappPhone) {
+      if (!pendingWhatsappPhone) {
         alert("मोबाइल नंबर नहीं मिला!");
         return;
       }
@@ -2273,49 +2394,57 @@
         data.inDate = chosenDate;
       }
 
-      callBackend('updateQuickStatus', data, function(res) {
-        btn.disabled = false; btn.innerText = '💾 स्थिति तुरंत अपडेट करें';
-        if (res && res.success) {
-          closeStatusModal(); fetchSheetData();
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false; btn.innerText = '💾 स्थिति तुरंत अपडेट करें';
+          if (res && res.success) {
+            closeStatusModal(); 
+            fetchSheetData();
 
-          var targetRec = null;
-          for(var x=0; x<allRecords.length; x++){
-            if(allRecords[x].code.toString().trim() === jobCd){ targetRec = allRecords[x]; break; }
-          }
-          if(targetRec && targetRec.phone){
-            var msgText = "";
-            if(stat === 'READY') {
-              var currentBill = billVal !== "" ? billVal : targetRec.bill;
-              var currentDue = Math.max(0, parseFloat(currentBill || 0) - parseFloat(targetRec.paid || 0));
-              msgText = "*AAFIYA ELECTRICALS*\n" +
-                        "प्रिय " + targetRec.name + ",\n" +
-                        "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " रिपेयर होकर पूरी तरह तैयार है।\n" +
-                        "🔹 जॉब कोड: #" + targetRec.code + "\n" +
-                        "🔹 फाइनल बिल: ₹" + currentBill + "\n" +
-                        "🔹 कुल बकाया (Due): ₹" + currentDue + "\n" +
-                        "कृपया दुकान से आकर अपना सामान प्राप्त करें।\n" +
-                        "📞 8859623437";
-            } else if(stat === 'HOLD') {
-              msgText = "*AAFIYA ELECTRICALS*\n" +
-                        "प्रिय " + targetRec.name + ",\n" +
-                        "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब कोड: #" + targetRec.code + ") वर्तमान में कुछ तकनीकी कारणों से HOLD पर रखा गया है। कार्य प्रगति पर आते ही आपको सूचित किया जाएगा।\n" +
-                        "📞 8859623437";
-            } else if(stat === 'DELIVERED') {
-              var currentDueDel = Math.max(0, parseFloat(targetRec.bill || 0) - parseFloat(targetRec.paid || 0));
-              msgText = "*AAFIYA ELECTRICALS*\n" +
-                        "प्रिय " + targetRec.name + ",\n" +
-                        "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब कोड: #" + targetRec.code + ") आपको सफलतापूर्वक डिलीवर कर दिया गया है।\n" +
-                        "🔹 शेष बकाया राशि: ₹" + currentDueDel + "\n" +
-                        "📞 8859623437";
+            // 📲 स्थिति के आधार पर WhatsApp प्रिव्यू पॉप-अप खोलें
+            var targetRec = null;
+            for (var x = 0; x < allRecords.length; x++) {
+              if (allRecords[x].code.toString().trim() === jobCd) { targetRec = allRecords[x]; break; }
             }
+            if (targetRec && targetRec.phone) {
+              var msgText = "";
+              if (stat === 'READY') {
+                var currentBill = (billVal !== "" && billVal !== undefined) ? billVal : (targetRec.bill || 0);
+                var currentDue = Math.max(0, parseFloat(currentBill || 0) - parseFloat(targetRec.paid || 0));
+                msgText = "*AAFIYA ELECTRICALS*\n" +
+                          "प्रिय " + targetRec.name + ",\n" +
+                          "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " तैयार है।\n" +
+                          "🔹 जॉब टोकन: #" + targetRec.code + "\n" +
+                          "🔹 फाइनल बिल: ₹" + currentBill + "\n" +
+                          "🔹 बकाया राशि: ₹" + currentDue + "\n" +
+                          "कृपया दुकान से आकर सामान प्राप्त करें।\n" +
+                          "📞 संपर्क: 8859623437";
+              } else if (stat === 'HOLD') {
+                var hReason = (data.holdReason ? (" (" + data.holdReason + ")") : "");
+                msgText = "*AAFIYA ELECTRICALS*\n" +
+                          "प्रिय " + targetRec.name + ",\n" +
+                          "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब #" + targetRec.code + ") तकनीकी कारणों से HOLD पर रखा गया है" + hReason + "। कार्य होते ही सूचित किया जाएगा।\n" +
+                          "📞 संपर्क: 8859623437";
+              } else if (stat === 'DELIVERED') {
+                var currentDueDel = Math.max(0, parseFloat(targetRec.bill || 0) - parseFloat(targetRec.paid || 0));
+                msgText = "*AAFIYA ELECTRICALS*\n" +
+                          "प्रिय " + targetRec.name + ",\n" +
+                          "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब #" + targetRec.code + ") डिलीवर कर दिया गया है।\n" +
+                          "🔹 शेष बकाया: ₹" + currentDueDel + "\n" +
+                          "📞 संपर्क: 8859623437";
+              }
 
-            if(msgText) {
-              openWhatsappModal(targetRec.phone, msgText);
+              if (msgText) {
+                openWhatsappModal(targetRec.phone, msgText);
+              }
             }
-          }
-
-        } else { alert(res ? res.message : 'त्रुटि हुई'); }
-      });
+          } else { alert(res ? res.message : 'त्रुटि हुई'); }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false; btn.innerText = '💾 स्थिति तुरंत अपडेट करें';
+          alert('त्रुटि: ' + err.message);
+        })
+        .updateQuickStatus(data, editPinUsed);
     }
 
     function editCustomerFromBadge(custId) {
@@ -2391,13 +2520,19 @@
         walletBalance: 0
       };
 
-      callBackend('updateCustomerProfile', custData, function(res) {
-        btn.disabled = false; btn.innerText = '💾 प्रोफ़ाइल अपडेट करें';
-        if (res && res.success) {
-          alert('सफलतापूर्वक अपडेट हुआ!');
-          closeCustomerModal(); fetchSheetData();
-        } else { alert(res ? res.message : 'त्रुटि हुई'); }
-      });
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.disabled = false; btn.innerText = '💾 प्रोफ़ाइल अपडेट करें';
+          if (res && res.success) {
+            alert('सफलतापूर्वक अपडेट हुआ!');
+            closeCustomerModal(); fetchSheetData();
+          } else { alert(res ? res.message : 'त्रुटि हुई'); }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false; btn.innerText = '💾 प्रोफ़ाइल अपडेट करें';
+          alert('त्रुटि: ' + err.message);
+        })
+        .updateCustomerProfile(custData, editPinUsed);
     }
 
     function openStatement(custId) {
@@ -2429,70 +2564,72 @@
       var tbody = document.getElementById('stmtTableBody');
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:#64748b;">⏳ पासबुक लोड हो रही है...</td></tr>';
 
-      callBackend('getCustomerPassbook', null, function(history) {
-        if (!history || history.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:#94a3b8;">अभी तक कोई अलग पासबुक एंट्री नहीं है।</td></tr>';
-          return;
-        }
+      google.script.run
+        .withSuccessHandler(function(history) {
+          if (!history || history.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:#94a3b8;">अभी तक कोई अलग पासबुक एंट्री नहीं है।</td></tr>';
+            return;
+          }
 
-        var totalCredit = 0;
-        var totalDebit = 0;
-        var rowsHtml = '';
+          var totalCredit = 0;
+          var totalDebit = 0;
+          var rowsHtml = '';
 
-        for (var k = 0; k < history.length; k++) {
-          var h = history[k];
-          var cr = parseFloat(h.credit) || 0;
-          var dr = parseFloat(h.debit) || 0;
+          for (var k = 0; k < history.length; k++) {
+            var h = history[k];
+            var cr = parseFloat(h.credit) || 0;
+            var dr = parseFloat(h.debit) || 0;
 
-          totalCredit += cr;
-          totalDebit += dr;
+            totalCredit += cr;
+            totalDebit += dr;
 
-          var crBadge = cr > 0 ? ('<b style="color:#15803d; font-size:0.95rem;">+ ₹' + cr + '</b>') : '-';
-          var drBadge = dr > 0 ? ('<b style="color:#b91c1c; font-size:0.95rem;">- ₹' + dr + '</b>') : '-';
-          var modeBadge = h.mode === 'UPI' ? '<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">📱 UPI</span>' : (h.mode === 'DISCOUNT' ? '<span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">🏷️ छूट</span>' : '<span style="background:#f1f5f9; color:#334155; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">💵 CASH</span>');
+            var crBadge = cr > 0 ? ('<b style="color:#15803d; font-size:0.95rem;">+ ₹' + cr + '</b>') : '-';
+            var drBadge = dr > 0 ? ('<b style="color:#b91c1c; font-size:0.95rem;">- ₹' + dr + '</b>') : '-';
+            var modeBadge = h.mode === 'UPI' ? '<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">📱 UPI</span>' : (h.mode === 'DISCOUNT' ? '<span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">🏷️ छूट</span>' : '<span style="background:#f1f5f9; color:#334155; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">💵 CASH</span>');
 
-          var codeDisplay = (h.jobCode && h.jobCode !== '-') 
-            ? ('<span class="badge badge-code badge-clickable" onclick="closeStatementModal(); editJobFromBadge(\'' + h.jobCode + '\')" title="✏️ एडिट करें" style="font-size:0.82rem; padding:2px 7px; cursor:pointer;">#' + h.jobCode + ' ✏️</span>') 
-            : '-';
+            var codeDisplay = (h.jobCode && h.jobCode !== '-') 
+              ? ('<span class="badge badge-code badge-clickable" onclick="closeStatementModal(); editJobFromBadge(\'' + h.jobCode + '\')" title="✏️ एडिट करें" style="font-size:0.82rem; padding:2px 7px; cursor:pointer;">#' + h.jobCode + ' ✏️</span>') 
+              : '-';
 
-          rowsHtml += '<tr>' +
-            '<td style="font-size:0.78rem; color:#64748b;">' + h.timestamp + '</td>' +
-            '<td>' + codeDisplay + '</td>' +
-            '<td>' + h.description + '</td>' +
-            '<td>' + modeBadge + '</td>' +
-            '<td>' + crBadge + '</td>' +
-            '<td>' + drBadge + '</td>' +
-            '</tr>';
-        }
+            rowsHtml += '<tr>' +
+              '<td style="font-size:0.78rem; color:#64748b;">' + h.timestamp + '</td>' +
+              '<td>' + codeDisplay + '</td>' +
+              '<td>' + h.description + '</td>' +
+              '<td>' + modeBadge + '</td>' +
+              '<td>' + crBadge + '</td>' +
+              '<td>' + drBadge + '</td>' +
+              '</tr>';
+          }
 
-        tbody.innerHTML = rowsHtml;
+          tbody.innerHTML = rowsHtml;
 
-        var netDiff = totalDebit - totalCredit;
-        var box = document.getElementById('stmtBalanceBox');
-        var lbl = document.getElementById('stmtBalanceLabel');
-        var val = document.getElementById('stmtNetBalance');
+          var netDiff = totalDebit - totalCredit;
+          var box = document.getElementById('stmtBalanceBox');
+          var lbl = document.getElementById('stmtBalanceLabel');
+          var val = document.getElementById('stmtNetBalance');
 
-        document.getElementById('stmtTotalJobs').innerText = custRecords.length;
-        document.getElementById('stmtTotalBill').innerText = '₹' + Math.round(totalDebit);
-        document.getElementById('stmtTotalPaid').innerText = '₹' + Math.round(totalCredit);
+          document.getElementById('stmtTotalJobs').innerText = custRecords.length;
+          document.getElementById('stmtTotalBill').innerText = '₹' + Math.round(totalDebit);
+          document.getElementById('stmtTotalPaid').innerText = '₹' + Math.round(totalCredit);
 
-        box.classList.remove('highlight-red', 'highlight-green');
-        if (netDiff > 0) {
-          box.classList.add('highlight-red');
-          lbl.innerText = 'कुल बकाया उधारी';
-          val.innerText = '₹' + Math.round(netDiff);
-          val.style.color = '#b91c1c';
-        } else if (netDiff < 0) {
-          box.classList.add('highlight-green');
-          lbl.innerText = '🟢 एडवांस जमा';
-          val.innerText = '₹' + Math.round(Math.abs(netDiff));
-          val.style.color = '#15803d';
-        } else {
-          lbl.innerText = 'हिसाब स्थिति';
-          val.innerText = '✅ चुकता';
-          val.style.color = '#15803d';
-        }
-      });
+          box.classList.remove('highlight-red', 'highlight-green');
+          if (netDiff > 0) {
+            box.classList.add('highlight-red');
+            lbl.innerText = 'कुल बकाया उधारी';
+            val.innerText = '₹' + Math.round(netDiff);
+            val.style.color = '#b91c1c';
+          } else if (netDiff < 0) {
+            box.classList.add('highlight-green');
+            lbl.innerText = '🟢 एडवांस जमा';
+            val.innerText = '₹' + Math.round(Math.abs(netDiff));
+            val.style.color = '#15803d';
+          } else {
+            lbl.innerText = 'हिसाब स्थिति';
+            val.innerText = '✅ चुकता';
+            val.style.color = '#15803d';
+          }
+        })
+        .getCustomerPassbook(custId);
 
       document.getElementById('stmtNewJobBtn').onclick = function() {
         closeStatementModal();
@@ -2528,18 +2665,18 @@
         totPaid += parseFloat(custRecords[j].paid || 0);
       }
       var net = totBill - totPaid;
-      var balMsg = net > 0 ? ('कुल बकाया उधारी: ₹' + net) : (net < 0 ? ('कुल एडवांस जमा: ₹' + Math.abs(net)) : 'हिसाब चुकता है');
+      var balMsg = net > 0 ? ('कुल बकाया उधारी: ₹' + net) : (net < 0 ? ('कुल एडवांस जमा: ₹' + Math.abs(net)) : 'खाता चुकता है');
 
       var text = '*AAFIYA ELECTRICALS*\n' +
         'प्रिय ' + first.name + ',\n' +
-        'आपके खाते का कुल विवरण:\n' +
+        'आपके खाते का विवरण:\n' +
         '------------------------------------\n' +
         'कुल काम (JOBS): ' + custRecords.length + '\n' +
         'कुल बिल: ₹' + totBill + '\n' +
         'कुल जमा: ₹' + totPaid + '\n' +
         balMsg + '\n' +
         '------------------------------------\n' +
-        '📞 8859623437';
+        '📞 संपर्क: 8859623437';
 
       openWhatsappModal(first.phone, text);
     }
@@ -2577,10 +2714,12 @@
         deletePayPrompt = confirm("⚠️ इस जॉब पर ₹" + paidAlready + " जमा हैं。\n\nक्या जमा रकम भी पूरी तरह हटानी है?\n(OK = रकम भी हटाएं | CANCEL = सिर्फ जॉब हटाएं)");
       }
 
-      callBackend('deleteRecordFromSheet', { code: code, flag: deletePayPrompt }, function(res) {
-        if (res && res.success) { alert('✅ रिकॉर्ड सफलतापूर्वक डिलीट कर दिया गया!'); fetchSheetData(); }
-        else { alert('अस्वीकृत: ' + (res ? res.message : 'त्रुटि')); }
-      });
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.success) { alert('✅ रिकॉर्ड सफलतापूर्वक डिलीट कर दिया गया!'); fetchSheetData(); }
+          else { alert('अस्वीकृत: ' + (res ? res.message : 'त्रुटि')); }
+        })
+        .deleteRecordFromSheet(code, deletePayPrompt, "4455");
     }
 
     function applySameReturnFromHub(code) {
@@ -2606,15 +2745,19 @@
         paidNow: 0
       };
 
-      callBackend('updateQuickStatus', data, function(res) {
-        if (res && res.success) {
-          alert('✅ जॉब #' + code + ' सफलतापूर्वक सेम रिटर्न दर्ज हो गया!');
-          closeJobDetailHub();
-          fetchSheetData();
-        } else { alert(res ? res.message : 'त्रुटि हुई'); }
-      });
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.success) {
+            alert('✅ जॉब #' + code + ' सफलतापूर्वक सेम रिटर्न दर्ज हो गया!');
+            closeJobDetailHub();
+            fetchSheetData();
+          } else { alert(res ? res.message : 'त्रुटि हुई'); }
+        })
+        .withFailureHandler(function(err) { alert('त्रुटि: ' + err.message); })
+        .updateQuickStatus(data, pin);
     }
 
+    // 📋 जॉब कार्ड विवरण हब
     function openJobDetailHub(code) {
       if (!code) return;
       var cleanCode = code.toString().replace(/[^0-9a-zA-Z]/g, '').trim();
@@ -2663,14 +2806,14 @@
       var warrantyHtml = '';
       if (hasWarranty) {
         var warText = (wDays % 30 === 0) ? ((wDays / 30) + ' MONTHS') : (wDays + ' DAYS');
-        warrantyHtml = '<div style="margin-top: 6px; padding: 6px 10px; border-radius: 6px; background: ' + (activeW ? '#dcfce7' : '#f1f5f9') + '; border: 1.5px solid ' + (activeW ? '#86efac' : '#cbd5e1') + ';">' +
+        warrantyHtml = '<div style="margin-top: 6px; padding: 6px 10px; border-radius: 6px; background: ' + (activeW ? '#dcfce7' : '#f1f5f9') + '; border: 1px solid ' + (activeW ? '#86efac' : '#cbd5e1') + ';">' +
           '<b style="color:' + (activeW ? '#166534' : '#64748b') + ';">🛡️ WARRANTY:</b> ' + (activeW ? ('चालू (' + r.expiryDate + ' तक - ' + warText + ')') : ('समाप्त (' + r.expiryDate + ')')) +
         '</div>';
       }
 
       var datesSectionHtml = '<div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 0.88rem; color: #334155;">' +
-        '<div style="margin-bottom: 4px;"><b>📥 सामान आने की तारीख (IN):</b> <span style="font-weight: 800; color: #0f172a;">' + (r.inDate || '-') + '</span></div>' +
-        (isOut ? ('<div><b>📤 सामान डिलीवरी तारीख (OUT):</b> <span style="font-weight: 900; color: #0f766e; background: #f0fdfa; padding: 2px 6px; border-radius: 4px; border: 1.5px solid #99f6e4;">' + (r.outDate || 'तारीख दर्ज नहीं') + '</span></div>') : '') +
+        '<div style="margin-bottom: 4px;"><b>📥 सामान आने की तारीख (IN):</b> <span style="font-weight: 800; color: #0f766e;">' + (r.inDate || '-') + '</span></div>' +
+        (isOut ? ('<div><b>📤 सामान डिलीवरी तारीख (OUT):</b> <span style="font-weight: 900; color: #0f766e; background: #f0fdfa; padding: 2px 6px; border-radius: 4px; border: 1px solid #99f6e4;">' + (r.outDate || 'तारीख दर्ज नहीं') + '</span></div>') : '') +
       '</div>';
 
       var buttonsHtml = '';
@@ -2704,7 +2847,7 @@
           '</div>' +
         '</div>' +
 
-        '<div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;">' +
+        '<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;">' +
           '<div style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin-bottom: 4px;">👤 ' + (r.name || 'ग्राहक') + '</div>' +
           '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 0.92rem;">' +
             '<div>' + (r.phone ? ('<a href="tel:+91' + getPhoneRaw10(r.phone) + '" style="color: #0284c7; font-weight: 800; text-decoration: none; background: #e0f2fe; padding: 3px 8px; border-radius: 4px; display: inline-block;">📞 ' + formatPhoneWith91(r.phone) + ' (कॉल करें)</a>') : '<span style="color:#94a3b8;">📞 नंबर नहीं</span>') + '</div>' +
@@ -2722,15 +2865,15 @@
         '</div>' +
 
         '<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; text-align: center; margin-bottom: 14px;">' +
-          '<div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px;">' +
+          '<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px;">' +
             '<div style="font-size: 0.75rem; color: #64748b; font-weight: 800;">FINAL BILL</div>' +
             '<div style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin-top: 2px;">₹' + (r.bill || 0) + '</div>' +
           '</div>' +
-          '<div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 8px;">' +
+          '<div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 8px;">' +
             '<div style="font-size: 0.75rem; color: #166534; font-weight: 800;">PAID</div>' +
             '<div style="font-size: 1.15rem; font-weight: 900; color: #15803d; margin-top: 2px;">₹' + (r.paid || 0) + '</div>' +
           '</div>' +
-          '<div style="background: ' + (netBal > 0 ? '#fee2e2' : '#f0fdf4') + '; border: 1.5px solid ' + (netBal > 0 ? '#fca5a5' : '#86efac') + '; border-radius: 8px; padding: 8px;">' +
+          '<div style="background: ' + (netBal > 0 ? '#fee2e2' : '#f0fdf4') + '; border: 1px solid ' + (netBal > 0 ? '#fca5a5' : '#86efac') + '; border-radius: 8px; padding: 8px;">' +
             '<div style="font-size: 0.75rem; color: ' + (netBal > 0 ? '#991b1b' : '#166534') + '; font-weight: 800;">DUE</div>' +
             '<div style="font-size: 1.15rem; font-weight: 900; color: ' + (netBal > 0 ? '#b91c1c' : '#15803d') + '; margin-top: 2px;">' + (netBal > 0 ? ('₹' + netBal) : '✅ चुकता') + '</div>' +
           '</div>' +
@@ -2799,7 +2942,7 @@
     function renderList(list) {
       var area = document.getElementById('resultsArea');
       if (list.length === 0) {
-        area.innerHTML = '<div style="background:#fff; border:1.5px solid #cbd5e1; border-radius:8px; text-align:center; color:#94a3b8; padding:20px; font-weight:800;">कोई चालू रिकॉर्ड नहीं मिला।</div>';
+        area.innerHTML = '<div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; text-align:center; color:#94a3b8; padding:20px; font-weight:800;">कोई चालू रिकॉर्ड नहीं मिला।</div>';
         return;
       }
 
