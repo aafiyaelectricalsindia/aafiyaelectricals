@@ -40,7 +40,7 @@
 
     #mainApp { display: none; width: 100%; }
     
-    /* 📱 मोबाइल स्क्रीन के बिल्कुल लेवल में संतुलित टॉप बार */
+    /* 📱 संतुलित मोबाइल टॉप बार */
     .top-nav-bar {
       display: flex; justify-content: space-between; align-items: center; gap: 4px;
       margin-bottom: 10px; padding: 2px 0; width: 100%;
@@ -68,7 +68,6 @@
       border-radius: 10px; font-size: 0.74rem; font-weight: 900;
     }
 
-    /* 🔄 रिफ़्रेश बटन स्टाइल */
     .btn-refresh {
       background: #f1f5f9; color: #0f766e; border: 1.5px solid #cbd5e1;
       padding: 6px 10px; border-radius: 7px; font-size: 0.84rem; font-weight: 900;
@@ -76,7 +75,6 @@
     }
     .btn-refresh:active { background: #e2e8f0; }
 
-    /* 🎨 बड़ा और टच-फ़्रेंडली रंग-बिरंगा मेन्यू */
     .top-dropdown-menu {
       position: absolute; right: 0; top: 110%; min-width: 235px;
       background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px;
@@ -204,7 +202,6 @@
 
   <!-- मुख्य ऐप स्क्रीन -->
   <div id="mainApp">
-    <!-- लाइन 1: AAFIYA ELECTRICALS | [➕ NEW] | [🔄 रिफ़्रेश] | [ड्रॉपडाउन मेन्यू] -->
     <div class="top-nav-bar">
       <div class="brand-title">AAFIYA ELECTRICALS</div>
       
@@ -225,7 +222,6 @@
           <span style="font-size: 0.75rem;">▼</span>
         </button>
 
-        <!-- रंग-बिरंगा मेन्यू -->
         <div id="topDropdownMenu" class="top-dropdown-menu" style="display: none;">
           <div style="padding: 6px 10px; font-size: 0.74rem; color: #64748b; font-weight: 900; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; margin-bottom: 4px;">
             ⏳ 15 MIN AUTO LOCK
@@ -237,7 +233,6 @@
           <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
           <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
           
-          <!-- वारंटी व डिलीवर केवल एडमिन (4455) को दिखेंगे -->
           <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
           <div class="menu-item mi-delivered" id="menuItem-DELIVERED" onclick="selectTopFilter('DELIVERED')"><span>📦 डिलीवर</span> <span class="menu-count" id="count-DELIVERED">0</span></div>
           
@@ -260,13 +255,11 @@
       </div>
     </div>
 
-    <!-- लाइन 2: सर्च बार -->
     <div style="margin-bottom: 10px;">
       <input type="text" id="searchInput" class="search-box" placeholder="🔍 कोड, ID, ग्राहक, मोबाइल, सामान से खोजें..." onkeyup="searchRecords()">
       <div id="searchStats" style="font-size: 0.8rem; color: #64748b; font-weight: 800; padding: 0 2px;"></div>
     </div>
 
-    <!-- लाइन 3: ग्राहक जॉब कार्ड्स -->
     <div id="loader">🔄 GOOGLE SHEET से डेटा लोड हो रहा है...</div>
     <div id="resultsArea"></div>
   </div>
@@ -304,15 +297,13 @@
 
       <div class="modal-body">
         <form id="jobForm" onsubmit="saveJobRecord(event)">
-          <!-- जॉब टाइप सेलेक्टर -->
           <div class="job-type-selector" id="jobTypeSelector">
-            <div class="job-type-btn active" id="jtBtn-REPAIR" onclick="setJobCategory('REPAIR')">🛠️️ दुकान रिपेयरिंग</div>
+            <div class="job-type-btn active" id="jtBtn-REPAIR" onclick="setJobCategory('REPAIR')">🛠️ दुकान रिपेयरिंग</div>
             <div class="job-type-btn" id="jtBtn-VISIT" onclick="setJobCategory('VISIT')">🏠 होम विज़िट</div>
             <div class="job-type-btn" id="jtBtn-SALE" onclick="setJobCategory('SALE')">🏷️ नया सामान सेल (वारंटी)</div>
           </div>
           <input type="hidden" id="jobCategory" value="REPAIR">
 
-          <!-- जॉब नंबर और कस्टमर ID बार -->
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; flex-wrap: wrap;">
             <div style="display: flex; gap: 8px; align-items: center;">
               <span style="font-weight: 900; color: #0369a1; font-size: 1.15rem;" id="displayJobCode">#1315</span>
@@ -328,7 +319,6 @@
             </div>
           </div>
 
-          <!-- 📅 आने की तारीख (IN) एवं डिलीवरी तारीख (OUT) बार -->
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 4px;">
@@ -344,7 +334,6 @@
               </div>
             </div>
 
-            <!-- 📤 डिलीवरी तारीख (OUT DATE) -->
             <div id="outDateRowContainer" style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
               <div style="display: flex; align-items: center; gap: 4px;">
                 <span style="font-size: 0.82rem; font-weight: 800; color: #15803d;">📤 सामान डिलीवर तारीख (OUT):</span>
@@ -391,7 +380,7 @@
           </div>
 
           <div id="jobHoldReasonGroup" class="form-group" style="display: none; background: #faf5ff; border: 1.5px solid #c084fc; padding: 8px 10px; border-radius: 6px;">
-            <label style="color: #7e22ce; font-weight: 800;">⏸️️ होल्ड पर रखने की वजह (REASON):</label>
+            <label style="color: #7e22ce; font-weight: 800;">⏸️ होल्ड पर रखने की वजह (REASON):</label>
             <input type="text" id="jobHoldReason" placeholder="उदा. IC मंगाना बाकी है" oninput="this.value = this.value.toUpperCase();">
           </div>
 
@@ -605,7 +594,7 @@
     </div>
   </div>
 
-  <!-- 📲 WhatsApp प्रिव्यू मॉडल (संदेश भेजने से पहले पुष्टि) -->
+  <!-- 📲 WhatsApp प्रिव्यू मॉडल -->
   <div id="whatsappModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header" style="background: #25d366;">
@@ -617,7 +606,7 @@
       </div>
       <div class="modal-body">
         <div style="font-size: 0.82rem; color: #475569; margin-bottom: 8px; font-weight: 800;">
-          ग्राहक को भेजा जाने वाला संदेश (आप चाहें तो इसमें बदलाव भी कर सकते हैं):
+          ग्राहक को भेजा जाने वाला संदेश:
         </div>
         <textarea id="whatsappMsgText" rows="8" style="width: 100%; font-size: 0.92rem; font-weight: 700; background: #f0fdf4; border: 1.5px solid #25d366; border-radius: 6px; padding: 10px; margin-bottom: 12px; font-family: monospace;"></textarea>
         <div style="display: flex; gap: 8px;">
@@ -808,7 +797,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
             <button type="button" class="btn" id="stmtNewJobBtn" style="width: auto; padding: 8px 12px; background: #0f766e; font-size: 0.9rem;">➕ नया सामान</button>
-            <button type="button" class="btn" style="width: auto; padding: 8px 12px; background: #2563eb; font-size: 0.9rem;" onclick="printStatement()">🖨️️ प्रिंट</button>
+            <button type="button" class="btn" style="width: auto; padding: 8px 12px; background: #2563eb; font-size: 0.9rem;" onclick="printStatement()">🖨️ प्रिंट</button>
           </div>
           <button type="button" class="btn" style="width: auto; padding: 8px 14px; background: #25d366; font-size: 0.9rem;" onclick="sendStatementWhatsApp()">📲 WHATSAPP पर भेजें</button>
         </div>
@@ -818,12 +807,12 @@
           <table class="ledger-table">
             <thead>
               <tr>
-                <th>कोड (EDIT)</th>
+                <th>कोड</th>
                 <th>तारीख</th>
                 <th>सामान व कंपनी</th>
                 <th>स्थिति (STATUS)</th>
                 <th>बिल</th>
-                <th>जमा किश्तें</th>
+                <th>जमा</th>
               </tr>
             </thead>
             <tbody id="stmtTableBody"></tbody>
@@ -839,18 +828,12 @@
 
   <script>
     // ==============================================================================================
-    // 🔗 1. गूगल ऐप्स स्क्रिप्ट वेब ऐप यूआरएल (यहाँ आपका लिंक सबसे ऊपर लगा दिया गया है):
-    // ----------------------------------------------------------------------------------------------
-    // यह वही लिंक है जहाँ से आपका सारा डेटा (Google Sheet) आता और जाता है।
-    // उदाहरण: "https://script.google.com/macros/s/AKfycby.../exec"
+    // 🔗 1. गूगल ऐप्स स्क्रिप्ट वेब ऐप यूआरएल (आपका लिंक सबसे ऊपर सेट किया गया है):
     // ==============================================================================================
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
 
     // ==============================================================================================
     // 🌐 2. GitHub Pages को Google Apps Script से जोड़ने वाला ऑटो-ब्रिज (Shim):
-    // ----------------------------------------------------------------------------------------------
-    // यह हिस्सा आपके GitHub पेज पर google.script.run को चालू रखता है ताकि आपका पूरा पुराना कोड
-    // बिना किसी बदलाव के सीधे Google Sheet से डेटा लोड कर सके और सुरक्षित सेव कर सके।
     // ==============================================================================================
     if (typeof google === 'undefined' || !google.script || !google.script.run) {
       window.google = window.google || {};
@@ -945,7 +928,7 @@
     }
 
     // ==============================================================================================
-    // 📊 3. मुख्य वैरिएबल्स और स्टेट (पूर्ववत सुरक्षित)
+    // 📊 3. मुख्य वैरिएबल्स और स्टेट
     // ==============================================================================================
     var allRecords = [];
     var trashRecords = [];
@@ -959,7 +942,7 @@
     var activeStatementCustId = '';
     var lastSavedRecord = null;
     var activeQsRecord = null;
-    var pendingWhatsappPhone = ''; // 📱 WhatsApp नंबर होल्ड करने के लिए
+    var pendingWhatsappPhone = '';
 
     var AUTO_LOGOUT_SECONDS = 15 * 60;
     var remainingSeconds = AUTO_LOGOUT_SECONDS;
@@ -980,7 +963,6 @@
       return clean.length >= 10 ? clean.slice(-10) : clean;
     }
 
-    // 📱 नया सामान लेते समय 10 अंक का नंबर डालते ही सही पुराना खाता ढूँढना
     function handlePhoneInputAutoMatch() {
       if (isEditMode) return;
       var ph = document.getElementById('custPhone').value.replace(/[^0-9]/g, '');
@@ -1008,7 +990,6 @@
       }
     }, { passive: false });
 
-    // बैकड्रॉप टच
     window.addEventListener('click', function(e) {
       var topMenu = document.getElementById('topDropdownMenu');
       var topBtn = document.getElementById('topMenuTriggerBtn');
@@ -1477,7 +1458,7 @@
       document.getElementById('qpCustInfo').innerText = r.name + ' (' + cid + ')';
       document.getElementById('qpTotalCustBalance').innerText = 'ग्राहक का कुल बकाया: ₹' + netBal;
       document.getElementById('qpAmount').value = '';
-      document.getElementById('qpNote').value = ''; // 📝 नोट रीसेट
+      document.getElementById('qpNote').value = '';
 
       document.getElementById('qpPayMode').value = 'CASH';
       handleQuickPayModeChange();
@@ -1525,7 +1506,6 @@
 
     function closeQuickPayModal() { document.getElementById('quickPayModal').style.display = 'none'; }
 
-    // 🔒 क्विक पेमेंट / रिफंड (नोट्स के साथ)
     function submitQuickPay(e) {
       e.preventDefault();
       var pin = getAuthorizedPin("पैसे जमा करें");
@@ -1543,10 +1523,10 @@
       var data = {
         code: jCode,
         customerId: cId,
-        status: 'KEEP', // ⚡ स्टेटस कभी नहीं बदलेगा
+        status: 'KEEP',
         paidNow: payAmt,
         mode: payMode,
-        note: payNote // 📝 नोट भेजा जा रहा है
+        note: payNote
       };
 
       google.script.run
@@ -1557,7 +1537,6 @@
             closeQuickPayModal();
             fetchSheetData();
 
-            // 📲 पेमेंट रसीद का WhatsApp प्रिव्यू
             var targetRec = null;
             for (var x = 0; x < allRecords.length; x++) {
               if (allRecords[x].code.toString().trim() === jCode) { targetRec = allRecords[x]; break; }
@@ -1566,7 +1545,7 @@
               var noteText = payNote ? (" (" + payNote + ")") : "";
               var msgText = "*AAFIYA ELECTRICALS*\n" +
                             "प्रिय " + targetRec.name + ",\n" +
-                            "आपके खाते में ₹" + payAmt + " का भुगतान जमा कर लिया गया है" + noteText + "।\n" +
+                            "आपके खाते में ₹" + payAmt + " का भुगतान प्राप्त कर जमा कर लिया गया है" + noteText + "।\n" +
                             "🔹 माध्यम: " + payMode + "\n" +
                             "🔹 संदर्भ जॉब: #" + jCode + "\n" +
                             "📞 संपर्क: 8859623437";
@@ -1769,7 +1748,13 @@
           }
           populateDatalists();
 
-          computeCustomerLedgerMap();
+          // ⚡ अगर बैकएंड ने कुल लेज़र भेजा है तो उसे सीधे इस्तेमाल करें (स्टाफ और एडमिन दोनों का हिसाब सिंक)
+          if (res && res.customerLedgerMap && Object.keys(res.customerLedgerMap).length > 0) {
+            customerLedgerMap = res.customerLedgerMap;
+          } else {
+            computeCustomerLedgerMap();
+          }
+
           updateFilterCounts();
           searchRecords();
           if (activeStatementCustId) openStatement(activeStatementCustId);
@@ -2363,6 +2348,7 @@
 
     function closeStatusModal() { document.getElementById('statusModal').style.display = 'none'; }
 
+    // ⚡ होल्ड मैसेज सुधार के साथ स्थिति अपडेट फ़ंक्शन
     function submitQuickStatus(e) {
       e.preventDefault();
       var btn = document.getElementById('qsSubmitBtn');
@@ -2376,11 +2362,12 @@
 
       var jobCd = document.getElementById('qsJobCode').value.trim();
       var billVal = document.getElementById('qsBill').value.trim();
+      var holdReasonVal = (stat === 'HOLD') ? document.getElementById('qsHoldReason').value.trim().toUpperCase() : '';
 
       var data = {
         code: jobCd,
         status: stat,
-        holdReason: (stat === 'HOLD') ? document.getElementById('qsHoldReason').value.trim().toUpperCase() : '',
+        holdReason: holdReasonVal,
         components: document.getElementById('qsComponents').value.trim().toUpperCase(),
         bill: billVal,
         warrantyDays: (stat === 'RETURN') ? 0 : wDays,
@@ -2401,7 +2388,6 @@
             closeStatusModal(); 
             fetchSheetData();
 
-            // 📲 स्थिति के आधार पर WhatsApp प्रिव्यू पॉप-अप खोलें
             var targetRec = null;
             for (var x = 0; x < allRecords.length; x++) {
               if (allRecords[x].code.toString().trim() === jobCd) { targetRec = allRecords[x]; break; }
@@ -2420,16 +2406,18 @@
                           "कृपया दुकान से आकर सामान प्राप्त करें।\n" +
                           "📞 संपर्क: 8859623437";
               } else if (stat === 'HOLD') {
-                var hReason = (data.holdReason ? (" (" + data.holdReason + ")") : "");
+                // 🛑 होल्ड पर नया सीधा और स्पष्ट संदेश
+                var hReasonText = holdReasonVal ? ("\nवजह: " + holdReasonVal) : "";
                 msgText = "*AAFIYA ELECTRICALS*\n" +
                           "प्रिय " + targetRec.name + ",\n" +
-                          "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब #" + targetRec.code + ") तकनीकी कारणों से HOLD पर रखा गया है" + hReason + "। कार्य होते ही सूचित किया जाएगा।\n" +
+                          "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब टोकन: #" + targetRec.code + ") वर्तमान में HOLD पर रखा गया है।" + hReasonText + "\n" +
+                          "होल्ड के कारण व जानकारी के लिए कृपया दुकान पर संपर्क करें या कॉल करें।\n" +
                           "📞 संपर्क: 8859623437";
               } else if (stat === 'DELIVERED') {
                 var currentDueDel = Math.max(0, parseFloat(targetRec.bill || 0) - parseFloat(targetRec.paid || 0));
                 msgText = "*AAFIYA ELECTRICALS*\n" +
                           "प्रिय " + targetRec.name + ",\n" +
-                          "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब #" + targetRec.code + ") डिलीवर कर दिया गया है।\n" +
+                          "आपका " + targetRec.item + (targetRec.brand ? " (" + targetRec.brand + ")" : "") + " (जॉब टोकन: #" + targetRec.code + ") डिलीवर कर दिया गया है।\n" +
                           "🔹 शेष बकाया: ₹" + currentDueDel + "\n" +
                           "📞 संपर्क: 8859623437";
               }
@@ -2535,6 +2523,7 @@
         .updateCustomerProfile(custData, editPinUsed);
     }
 
+    // ⚡ सुधार: ग्राहक स्टेटमेंट खोलते ही पूरा इतिहास तुरंत स्क्रीन पर दिखेगा (कभी गायब नहीं होगा)
     function openStatement(custId) {
       if (!custId) return;
       activeStatementCustId = custId;
@@ -2552,81 +2541,106 @@
       var thead = document.querySelector('#statementModal .ledger-table thead');
       if (thead) {
         thead.innerHTML = '<tr>' +
+          '<th>कोड</th>' +
           '<th>तारीख</th>' +
-          '<th>जॉब टोकन</th>' +
-          '<th>विवरण / काम</th>' +
-          '<th>माध्यम</th>' +
-          '<th style="color:#15803d;">जमा (CREDIT 🟢)</th>' +
-          '<th style="color:#b91c1c;">निकासी/वापसी (DEBIT 🔴)</th>' +
+          '<th>सामान व कंपनी</th>' +
+          '<th>स्थिति (STATUS)</th>' +
+          '<th>बिल</th>' +
+          '<th>जमा</th>' +
           '</tr>';
       }
 
       var tbody = document.getElementById('stmtTableBody');
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:#64748b;">⏳ पासबुक लोड हो रही है...</td></tr>';
+      
+      // 1. तुरंत सभी पिछले रिकॉर्ड्स स्क्रीन पर दिखाएं
+      var defaultHtml = '';
+      var totBillCalc = 0;
+      var totPaidCalc = 0;
 
+      for (var j = 0; j < custRecords.length; j++) {
+        var rec = custRecords[j];
+        var b = parseFloat(rec.bill || 0);
+        var p = parseFloat(rec.paid || 0);
+        totBillCalc += b;
+        totPaidCalc += p;
+
+        defaultHtml += '<tr>' +
+          '<td><b>#' + rec.code + '</b></td>' +
+          '<td style="font-size:0.78rem; color:#64748b;">' + (rec.inDate || '-') + '</td>' +
+          '<td><b>' + rec.item + '</b> ' + (rec.brand ? ('(' + rec.brand + ')') : '') + '</td>' +
+          '<td>' + (rec.status || 'DELIVERED') + '</td>' +
+          '<td>₹' + b + '</td>' +
+          '<td style="color:#15803d; font-weight:800;">₹' + p + '</td>' +
+          '</tr>';
+      }
+      tbody.innerHTML = defaultHtml;
+
+      var netDiff = totBillCalc - totPaidCalc;
+      var box = document.getElementById('stmtBalanceBox');
+      var lbl = document.getElementById('stmtBalanceLabel');
+      var val = document.getElementById('stmtNetBalance');
+
+      document.getElementById('stmtTotalJobs').innerText = custRecords.length;
+      document.getElementById('stmtTotalBill').innerText = '₹' + Math.round(totBillCalc);
+      document.getElementById('stmtTotalPaid').innerText = '₹' + Math.round(totPaidCalc);
+
+      box.classList.remove('highlight-red', 'highlight-green');
+      if (netDiff > 0) {
+        box.classList.add('highlight-red');
+        lbl.innerText = 'कुल बकाया उधारी';
+        val.innerText = '₹' + Math.round(netDiff);
+        val.style.color = '#b91c1c';
+      } else if (netDiff < 0) {
+        box.classList.add('highlight-green');
+        lbl.innerText = '🟢 एडवांस जमा';
+        val.innerText = '₹' + Math.round(Math.abs(netDiff));
+        val.style.color = '#15803d';
+      } else {
+        lbl.innerText = 'हिसाब स्थिति';
+        val.innerText = '✅ चुकता';
+        val.style.color = '#15803d';
+      }
+
+      // 2. बैकएंड पासबुक से विस्तृत लेन-देन लोड करें (यदि उपलब्ध हो)
       google.script.run
         .withSuccessHandler(function(history) {
-          if (!history || history.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:#94a3b8;">अभी तक कोई अलग पासबुक एंट्री नहीं है।</td></tr>';
-            return;
-          }
+          if (history && history.length > 0) {
+            var rowsHtml = '';
+            var theadCustom = document.querySelector('#statementModal .ledger-table thead');
+            if (theadCustom) {
+              theadCustom.innerHTML = '<tr>' +
+                '<th>तारीख</th>' +
+                '<th>जॉब टोकन</th>' +
+                '<th>विवरण / काम</th>' +
+                '<th>माध्यम</th>' +
+                '<th style="color:#15803d;">जमा (CREDIT 🟢)</th>' +
+                '<th style="color:#b91c1c;">बिल / चार्ज (DEBIT 🔴)</th>' +
+                '</tr>';
+            }
 
-          var totalCredit = 0;
-          var totalDebit = 0;
-          var rowsHtml = '';
+            for (var k = 0; k < history.length; k++) {
+              var h = history[k];
+              var cr = parseFloat(h.credit) || 0;
+              var dr = parseFloat(h.debit) || 0;
 
-          for (var k = 0; k < history.length; k++) {
-            var h = history[k];
-            var cr = parseFloat(h.credit) || 0;
-            var dr = parseFloat(h.debit) || 0;
+              var crBadge = cr > 0 ? ('<b style="color:#15803d; font-size:0.95rem;">+ ₹' + cr + '</b>') : '-';
+              var drBadge = dr > 0 ? ('<b style="color:#b91c1c; font-size:0.95rem;">- ₹' + dr + '</b>') : '-';
+              var modeBadge = h.mode === 'UPI' ? '<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">📱 UPI</span>' : (h.mode === 'DISCOUNT' ? '<span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">🏷️ छूट</span>' : '<span style="background:#f1f5f9; color:#334155; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">💵 CASH</span>');
 
-            totalCredit += cr;
-            totalDebit += dr;
+              var codeDisplay = (h.jobCode && h.jobCode !== '-') 
+                ? ('<span class="badge badge-code badge-clickable" onclick="closeStatementModal(); editJobFromBadge(\'' + h.jobCode + '\')" title="✏️ एडिट करें" style="font-size:0.82rem; padding:2px 7px; cursor:pointer;">#' + h.jobCode + ' ✏️</span>') 
+                : '-';
 
-            var crBadge = cr > 0 ? ('<b style="color:#15803d; font-size:0.95rem;">+ ₹' + cr + '</b>') : '-';
-            var drBadge = dr > 0 ? ('<b style="color:#b91c1c; font-size:0.95rem;">- ₹' + dr + '</b>') : '-';
-            var modeBadge = h.mode === 'UPI' ? '<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">📱 UPI</span>' : (h.mode === 'DISCOUNT' ? '<span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">🏷️ छूट</span>' : '<span style="background:#f1f5f9; color:#334155; padding:2px 6px; border-radius:4px; font-weight:800; font-size:0.75rem;">💵 CASH</span>');
-
-            var codeDisplay = (h.jobCode && h.jobCode !== '-') 
-              ? ('<span class="badge badge-code badge-clickable" onclick="closeStatementModal(); editJobFromBadge(\'' + h.jobCode + '\')" title="✏️ एडिट करें" style="font-size:0.82rem; padding:2px 7px; cursor:pointer;">#' + h.jobCode + ' ✏️</span>') 
-              : '-';
-
-            rowsHtml += '<tr>' +
-              '<td style="font-size:0.78rem; color:#64748b;">' + h.timestamp + '</td>' +
-              '<td>' + codeDisplay + '</td>' +
-              '<td>' + h.description + '</td>' +
-              '<td>' + modeBadge + '</td>' +
-              '<td>' + crBadge + '</td>' +
-              '<td>' + drBadge + '</td>' +
-              '</tr>';
-          }
-
-          tbody.innerHTML = rowsHtml;
-
-          var netDiff = totalDebit - totalCredit;
-          var box = document.getElementById('stmtBalanceBox');
-          var lbl = document.getElementById('stmtBalanceLabel');
-          var val = document.getElementById('stmtNetBalance');
-
-          document.getElementById('stmtTotalJobs').innerText = custRecords.length;
-          document.getElementById('stmtTotalBill').innerText = '₹' + Math.round(totalDebit);
-          document.getElementById('stmtTotalPaid').innerText = '₹' + Math.round(totalCredit);
-
-          box.classList.remove('highlight-red', 'highlight-green');
-          if (netDiff > 0) {
-            box.classList.add('highlight-red');
-            lbl.innerText = 'कुल बकाया उधारी';
-            val.innerText = '₹' + Math.round(netDiff);
-            val.style.color = '#b91c1c';
-          } else if (netDiff < 0) {
-            box.classList.add('highlight-green');
-            lbl.innerText = '🟢 एडवांस जमा';
-            val.innerText = '₹' + Math.round(Math.abs(netDiff));
-            val.style.color = '#15803d';
-          } else {
-            lbl.innerText = 'हिसाब स्थिति';
-            val.innerText = '✅ चुकता';
-            val.style.color = '#15803d';
+              rowsHtml += '<tr>' +
+                '<td style="font-size:0.78rem; color:#64748b;">' + h.timestamp + '</td>' +
+                '<td>' + codeDisplay + '</td>' +
+                '<td>' + h.description + '</td>' +
+                '<td>' + modeBadge + '</td>' +
+                '<td>' + crBadge + '</td>' +
+                '<td>' + drBadge + '</td>' +
+                '</tr>';
+            }
+            tbody.innerHTML = rowsHtml;
           }
         })
         .getCustomerPassbook(custId);
@@ -2858,7 +2872,7 @@
         '<div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 0.92rem;">' +
           '<div style="margin-bottom: 6px;"><b>⚡ सामान:</b> <span style="background: #e0f2fe; color: #0369a1; font-weight: 900; padding: 2px 8px; border-radius: 4px;">' + r.item + '</span>' + (r.brand ? (' <span class="badge badge-brand" style="margin-left: 4px;">🏷️ ' + r.brand + '</span>') : '') + '</div>' +
           serialHtml +
-          (r.work ? ('<div style="margin-bottom: 5px; color: #1e293b; font-weight: 700;"><b>🛠️ काम / समस्या:</b> ' + r.work + '</div>') : '') +
+          (r.work ? ('<div style="margin-bottom: 5px; color: #1e293b; font-weight: 700;"><b>🛠️️ काम / समस्या:</b> ' + r.work + '</div>') : '') +
           (r.components ? ('<div style="margin-bottom: 5px; color: #64748b; font-weight: 700;"><b>⚙️ पार्ट्स:</b> ' + r.components + '</div>') : '') +
           warrantyHtml +
           datesSectionHtml +
