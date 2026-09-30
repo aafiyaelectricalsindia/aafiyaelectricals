@@ -238,7 +238,7 @@
           
           <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
           
-          <div class="menu-item mi-missing" onclick="openMissingCodesModal()">
+          <div class="menu-item mi-missing" id="menuItem-MISSING" onclick="openMissingCodesModal()">
             <span>🔢 छूटे हुए कोड्स</span>
             <span class="menu-count" id="count-MISSING">0</span>
           </div>
@@ -1084,10 +1084,12 @@
           document.getElementById('adminTrashMenuItem').style.display = 'flex';
           document.getElementById('menuItem-WARRANTY').style.display = 'flex';
           document.getElementById('menuItem-DELIVERED').style.display = 'flex';
+          document.getElementById('menuItem-MISSING').style.display = 'flex';
         } else {
           document.getElementById('adminTrashMenuItem').style.display = 'none';
           document.getElementById('menuItem-WARRANTY').style.display = 'none';
           document.getElementById('menuItem-DELIVERED').style.display = 'none';
+          document.getElementById('menuItem-MISSING').style.display = 'none';
         }
 
         startTimer();
