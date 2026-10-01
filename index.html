@@ -1774,8 +1774,14 @@
     }
 
     function updateFilterCounts() {
-      computeCustomerLedgerMap();
+     computeCustomerLedgerMap();
       var bCount = 0, pCount = 0, rCount = 0, hCount = 0, dCount = 0, wCount = 0;
+
+      // ⚡ उधारी वाले कुल ग्राहकों (Accounts) की सही गिनती
+      for (var cKey in customerLedgerMap) {
+        if (customerLedgerMap[cKey].netBalance > 0) bCount++;
+      }
+
       var existingCodes = {};
       var maxCode = 0;
 
@@ -1783,7 +1789,6 @@
         var r = allRecords[i];
         var cid = r.customerId ? r.customerId.trim() : ('UNKNOWN_' + r.code);
         var custData = customerLedgerMap[cid];
-        if (custData && custData.netBalance > 0) bCount++;
         var s = r.status || 'DELIVERED';
         if (s === 'PENDING') pCount++;
         else if (s === 'READY') rCount++;
@@ -2909,10 +2914,46 @@
       document.getElementById('jobDetailHubModal').style.display = 'none'; 
     }
 
-    function searchRecords() {
+   function searchRecords() {
       var q = document.getElementById('searchInput').value.trim().toLowerCase();
       var isSearching = (q.length > 0);
       var filtered = [];
+      var seenBalCusts = {}; // ⚡ उधारी में एक ग्राहक का एक ही कार्ड दिखाने के लिए
+
+      for (var i = 0; i < allRecords.length; i++) {
+        var rec = allRecords[i];
+
+        if (isSearching) {
+          var match = (
+            (rec.code && rec.code.toLowerCase().indexOf(q) !== -1) ||
+            (rec.customerId && rec.customerId.toLowerCase().indexOf(q) !== -1) ||
+            (rec.phone && rec.phone.toLowerCase().indexOf(q) !== -1) ||
+            (rec.name && rec.name.toLowerCase().indexOf(q) !== -1) ||
+            (rec.address && rec.address.toLowerCase().indexOf(q) !== -1) ||
+            (rec.item && rec.item.toLowerCase().indexOf(q) !== -1) ||
+            (rec.brand && rec.brand.toLowerCase().indexOf(q) !== -1) ||
+            (rec.work && rec.work.toLowerCase().indexOf(q) !== -1)
+          );
+          if (!match) continue;
+        } else {
+          var s = rec.status || 'DELIVERED';
+          var cid = rec.customerId ? rec.customerId.trim() : ('UNKNOWN_' + rec.code);
+          var cData = customerLedgerMap[cid];
+
+          if (currentFilter === 'PENDING' && s !== 'PENDING') continue;
+          if (currentFilter === 'READY' && s !== 'READY') continue;
+          if (currentFilter === 'HOLD' && s !== 'HOLD') continue;
+          if (currentFilter === 'BALANCE') {
+            if (!cData || cData.netBalance <= 0) continue;
+            if (seenBalCusts[cid]) continue; // ⚡ अगर इस ग्राहक का खाता आ चुका है तो दोबारा न जोड़ें
+            seenBalCusts[cid] = true;
+          }
+          if (currentFilter === 'WARRANTY' && !isWarrantyActive(rec.expiryDate)) continue;
+          if (currentFilter === 'DELIVERED' && (s !== 'DELIVERED' && s !== 'RETURN')) continue;
+        }
+
+        filtered.push({ rec: rec, originalIndex: i });
+      }
 
       for (var i = 0; i < allRecords.length; i++) {
         var rec = allRecords[i];
@@ -3007,12 +3048,18 @@
         } else {
           balanceBadgeHtml = '<span style="background:#f0fdf4; color:#16a34a; border:1.5px solid #bbf7d0; padding:3px 8px; border-radius:6px; font-weight:900; font-size:0.85rem; white-space:nowrap;">✅ चुकता</span>';
         }
+        
+var isBalTab = (currentFilter === 'BALANCE' && !isSearching);
+        var cardClickAction = isBalTab ? ('openStatement(\'' + cid + '\')') : ('openJobDetailHub(\'' + rec.code + '\')');
+        var mainBadgeHtml = isBalTab 
+          ? ('<span class="badge badge-cust badge-clickable" onclick="event.stopPropagation(); openStatement(\'' + cid + '\')" title="📄 ग्राहक खाता देखें" style="font-size: 1.05rem; font-weight: 900; padding: 3px 10px;">🆔 ' + cid + '</span>')
+          : ('<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️</span>');
 
-        cardsHtml += '<div class="record-card ' + themeClass + '" onclick="openJobDetailHub(\'' + rec.code + '\')" title="पूरा विवरण देखने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
+        cardsHtml += '<div class="record-card ' + themeClass + '" onclick="' + cardClickAction + '" title="विवरण देखने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
           
           '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">' +
-            '<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️</span>' +
-            '<span class="badge badge-clickable" style="' + statusBadgeStyle + '" onclick="event.stopPropagation(); openQuickStatus(\'' + rec.code + '\')" title="⚡ स्थिति बदलें">' + statusBadgeText + '</span>' +
+            mainBadgeHtml +
+                   '<span class="badge badge-clickable" style="' + statusBadgeStyle + '" onclick="event.stopPropagation(); openQuickStatus(\'' + rec.code + '\')" title="⚡ स्थिति बदलें">' + statusBadgeText + '</span>' +
             '<span class="badge-clickable" onclick="event.stopPropagation(); openQuickPayModalFromCard(\'' + rec.code + '\')" title="💵 पेमेंट जमा करें">' + balanceBadgeHtml + '</span>' +
           '</div>' +
 
