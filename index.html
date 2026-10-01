@@ -1092,7 +1092,13 @@
           document.getElementById('menuItem-MISSING').style.display = 'none';
         }
 
-        startTimer();
+       startTimer();
+
+        // ⚡ Har 1 minute me background me data sync
+        setInterval(function() {
+          if (activePin) fetchSheetData(true);
+        }, 60000);
+
         populateDatalists();
         fetchSheetData();
       } else {
@@ -1721,18 +1727,41 @@
       }
     }
 
-    function fetchSheetData() {
+   function fetchSheetData(isBackground) {
       var loader = document.getElementById('loader');
-      loader.style.display = 'block';
-      loader.innerText = '🔄 GOOGLE SHEET से डेटा लोड हो रहा है...';
 
+      // 📱 1. Agar phone memory me purana data hai to bina rukey 0.1 second me screen khol do
+      if (!isBackground && !window._cacheRendered) {
+        var cached = localStorage.getItem('AAF_CACHE_' + activePin);
+        if (cached) {
+          try {
+            var cData = JSON.parse(cached);
+            allRecords = cData.records || [];
+            trashRecords = cData.trashList || [];
+            customerLedgerMap = cData.customerLedgerMap || {};
+            updateFilterCounts();
+            searchRecords();
+            window._cacheRendered = true;
+          } catch(e) {}
+        }
+      }
+
+      if (!isBackground && !window._cacheRendered) {
+        loader.style.display = 'block';
+        loader.innerText = '🔄 GOOGLE SHEET से डेटा लोड हो रहा है...';
+      }
+
+      // 🌐 2. Background me Google Sheet se naya data le aao
       google.script.run
         .withSuccessHandler(function(res) {
           loader.style.display = 'none';
           if (res && res.error) { alert(res.error); logout(); return; }
+
+          // Phone storage me naya data update karo
+          localStorage.setItem('AAF_CACHE_' + activePin, JSON.stringify(res));
+
           allRecords = (res && res.records) ? res.records : [];
           trashRecords = (res && res.trashList) ? res.trashList : [];
-          
           allRecords.sort(function(a, b) { return (parseInt(b.code, 10) || 0) - (parseInt(a.code, 10) || 0); });
 
           autoNextJobCode = (res && res.nextCode) ? res.nextCode : 1315;
@@ -1750,7 +1779,6 @@
           }
           populateDatalists();
 
-          // ⚡ अगर बैकएंड ने कुल लेज़र भेजा है तो उसे सीधे इस्तेमाल करें (स्टाफ और एडमिन दोनों का हिसाब सिंक)
           if (res && res.customerLedgerMap && Object.keys(res.customerLedgerMap).length > 0) {
             customerLedgerMap = res.customerLedgerMap;
           } else {
@@ -1768,11 +1796,11 @@
           }
         })
         .withFailureHandler(function(err) {
-          loader.innerText = 'डेटा लोड नहीं हो सका: ' + err.message;
+          loader.style.display = 'none';
+          if (!isBackground) console.log('Data sync error: ' + err.message);
         })
         .getSheetData(activePin);
     }
-
     function updateFilterCounts() {
      computeCustomerLedgerMap();
       var bCount = 0, pCount = 0, rCount = 0, hCount = 0, dCount = 0, wCount = 0;
