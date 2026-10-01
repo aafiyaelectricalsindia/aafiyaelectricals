@@ -2942,50 +2942,41 @@
       document.getElementById('jobDetailHubModal').style.display = 'none'; 
     }
 
-   function searchRecords() {
+  function searchRecords() {
       var q = document.getElementById('searchInput').value.trim().toLowerCase();
       var isSearching = (q.length > 0);
       var filtered = [];
-      var seenBalCusts = {}; // ⚡ उधारी में एक ग्राहक का एक ही कार्ड दिखाने के लिए
+      var seenCusts = {}; // ⚡ उधारी में एक ग्राहक का केवल 1 खाता कार्ड दिखाने के लिए
 
       for (var i = 0; i < allRecords.length; i++) {
         var rec = allRecords[i];
+        var cid = rec.customerId ? rec.customerId.trim() : ('UNKNOWN_' + rec.code);
+        var cData = customerLedgerMap[cid];
 
-        if (isSearching) {
-          var match = (
-            (rec.code && rec.code.toLowerCase().indexOf(q) !== -1) ||
-            (rec.customerId && rec.customerId.toLowerCase().indexOf(q) !== -1) ||
-            (rec.phone && rec.phone.toLowerCase().indexOf(q) !== -1) ||
-            (rec.name && rec.name.toLowerCase().indexOf(q) !== -1) ||
-            (rec.address && rec.address.toLowerCase().indexOf(q) !== -1) ||
-            (rec.item && rec.item.toLowerCase().indexOf(q) !== -1) ||
-            (rec.brand && rec.brand.toLowerCase().indexOf(q) !== -1) ||
-            (rec.work && rec.work.toLowerCase().indexOf(q) !== -1)
-          );
-          if (!match) continue;
-        } else {
-          var s = rec.status || 'DELIVERED';
-          var cid = rec.customerId ? rec.customerId.trim() : ('UNKNOWN_' + rec.code);
-          var cData = customerLedgerMap[cid];
+        // ⚡ उधारी (BALANCE) फ़िल्टर: जॉब्स के बजाय सीधे ग्राहक खाते को पकड़ेगा
+        if (currentFilter === 'BALANCE') {
+          if (!cData || cData.netBalance <= 0) continue;
 
-          if (currentFilter === 'PENDING' && s !== 'PENDING') continue;
-          if (currentFilter === 'READY' && s !== 'READY') continue;
-          if (currentFilter === 'HOLD' && s !== 'HOLD') continue;
-          if (currentFilter === 'BALANCE') {
-            if (!cData || cData.netBalance <= 0) continue;
-            if (seenBalCusts[cid]) continue; // ⚡ अगर इस ग्राहक का खाता आ चुका है तो दोबारा न जोड़ें
-            seenBalCusts[cid] = true;
+          if (isSearching) {
+            var match = (
+              (rec.customerId && rec.customerId.toLowerCase().indexOf(q) !== -1) ||
+              (rec.phone && rec.phone.toLowerCase().indexOf(q) !== -1) ||
+              (rec.name && rec.name.toLowerCase().indexOf(q) !== -1) ||
+              (rec.address && rec.address.toLowerCase().indexOf(q) !== -1) ||
+              (rec.code && rec.code.toLowerCase().indexOf(q) !== -1)
+            );
+            if (!match) continue;
           }
-          if (currentFilter === 'WARRANTY' && !isWarrantyActive(rec.expiryDate)) continue;
-          if (currentFilter === 'DELIVERED' && (s !== 'DELIVERED' && s !== 'RETURN')) continue;
+
+          // ⚡ डुप्लीकेट रोकें: एक ग्राहक का केवल 1 ही कार्ड जुड़ेगा
+          if (seenCusts[cid]) continue;
+          seenCusts[cid] = true;
+
+          filtered.push({ rec: rec, originalIndex: i });
+          continue;
         }
 
-        filtered.push({ rec: rec, originalIndex: i });
-      }
-
-      for (var i = 0; i < allRecords.length; i++) {
-        var rec = allRecords[i];
-
+        // बाकी सभी फ़िल्टर्स (चालू काम, तैयार, होल्ड, डिलीवर) के लिए सामान्य जॉब कार्ड
         if (isSearching) {
           var match = (
             (rec.code && rec.code.toLowerCase().indexOf(q) !== -1) ||
@@ -3000,13 +2991,9 @@
           if (!match) continue;
         } else {
           var s = rec.status || 'DELIVERED';
-          var cid = rec.customerId ? rec.customerId.trim() : ('UNKNOWN_' + rec.code);
-          var cData = customerLedgerMap[cid];
-
           if (currentFilter === 'PENDING' && s !== 'PENDING') continue;
           if (currentFilter === 'READY' && s !== 'READY') continue;
           if (currentFilter === 'HOLD' && s !== 'HOLD') continue;
-          if (currentFilter === 'BALANCE' && (!cData || cData.netBalance <= 0)) continue;
           if (currentFilter === 'WARRANTY' && !isWarrantyActive(rec.expiryDate)) continue;
           if (currentFilter === 'DELIVERED' && (s !== 'DELIVERED' && s !== 'RETURN')) continue;
         }
@@ -3015,7 +3002,9 @@
       }
 
       var statsEl = document.getElementById('searchStats');
-      if (isSearching) {
+      if (currentFilter === 'BALANCE') {
+        statsEl.innerText = isSearching ? ('खोज परिणाम: ' + filtered.length + ' ग्राहक खाते') : ('कुल उधारी खाते: ' + filtered.length);
+      } else if (isSearching) {
         statsEl.innerText = 'खोज परिणाम: ' + filtered.length + ' (दिख रहे रिकॉर्ड्स में)';
       } else {
         statsEl.innerText = 'दिख रहे रिकॉर्ड: ' + filtered.length;
@@ -3023,11 +3012,13 @@
 
       renderList(filtered);
     }
+      renderList(filtered);
+    }
 
-    function renderList(list) {
+   function renderList(list) {
       var area = document.getElementById('resultsArea');
       if (list.length === 0) {
-        area.innerHTML = '<div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; text-align:center; color:#94a3b8; padding:20px; font-weight:800;">कोई चालू रिकॉर्ड नहीं मिला।</div>';
+        area.innerHTML = '<div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; text-align:center; color:#94a3b8; padding:20px; font-weight:800;">कोई रिकॉर्ड नहीं मिला।</div>';
         return;
       }
 
@@ -3036,13 +3027,48 @@
       for (var i = 0; i < limit; i++) {
         var item = list[i];
         var rec = item.rec;
-
-        var s = rec.status || 'DELIVERED';
         var cid = rec.customerId ? rec.customerId.trim() : ('UNKNOWN_' + rec.code);
-        var cData = customerLedgerMap[cid];
-        var netBal = cData ? cData.netBalance : 0;
-        var adv = cData ? cData.advance : 0;
+        var cData = customerLedgerMap[cid] || { netBalance: 0, advance: 0, totalBill: 0, totalPaid: 0, jobCount: 1 };
+        var netBal = cData.netBalance || 0;
+        var adv = cData.advance || 0;
 
+        // 🌟 उधारी (BALANCE) फ़िल्टर: सिंगल अकाउंट कार्ड (जॉब नंबर की जगह अकाउंट ID और कुल हिसाब)
+        if (currentFilter === 'BALANCE') {
+          cardsHtml += '<div class="record-card card-theme-balance" onclick="openStatement(\'' + cid + '\')" title="📄 ग्राहक का पूरा खाता खोलने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
+            
+            '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">' +
+              '<span class="badge badge-cust badge-clickable" onclick="event.stopPropagation(); openStatement(\'' + cid + '\')" title="📄 ग्राहक खाता देखें" style="font-size: 1.05rem; font-weight: 900; padding: 4px 10px; background:#f3e8ff; color:#7e22ce; border:1.5px solid #9333ea;">🆔 ' + cid + ' 📄</span>' +
+              '<span class="badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-weight:800; font-size:0.8rem;">📦 कुल ' + cData.jobCount + ' काम</span>' +
+              '<span class="badge-clickable" onclick="event.stopPropagation(); openQuickPayModalFromCard(\'' + rec.code + '\')" title="💵 पेमेंट जमा करें">' +
+                '<span style="background:#fee2e2; color:#b91c1c; border:1.5px solid #fca5a5; padding:3px 8px; border-radius:6px; font-weight:900; font-size:0.85rem; white-space:nowrap;">⚠️ DUE: ₹' + netBal + '</span>' +
+              '</span>' +
+            '</div>' +
+
+            '<div style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin: 4px 0 3px 0; word-break: break-word; line-height: 1.25;">' +
+              '👤 ' + rec.name +
+            '</div>' +
+
+            '<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px;">' +
+              '<div>' +
+                (rec.phone ? ('<a href="tel:+91' + getPhoneRaw10(rec.phone) + '" onclick="event.stopPropagation();" style="text-decoration: none; color: #0284c7; font-weight: 900; font-size: 0.95rem; background: #e0f2fe; padding: 2px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="📞 कॉल करें">📞 ' + formatPhoneWith91(rec.phone) + '</a>') : '<span style="color: #94a3b8; font-size: 0.82rem;">📞 नंबर नहीं</span>') +
+              '</div>' +
+              '<div style="font-size: 0.88rem; font-weight: 800; color: #475569; text-align: right;">' +
+                '📍 ' + (rec.address || 'लोकल / दुकान') +
+              '</div>' +
+            '</div>' +
+
+            '<div style="font-size: 0.8rem; font-weight: 800; color: #64748b; margin-top: 6px; border-top: 1px dashed #fca5a5; padding-top: 4px; display: flex; justify-content: space-between;">' +
+              '<span>कुल बिल: ₹' + Math.round(cData.totalBill) + '</span>' +
+              '<span>कुल जमा: ₹' + Math.round(cData.totalPaid) + '</span>' +
+              '<span style="color:#b91c1c; font-weight:900;">खाता बकाया: ₹' + netBal + '</span>' +
+            '</div>' +
+
+          '</div>';
+          continue;
+        }
+
+        // बाकी सभी फ़िल्टर के लिए सामान्य जॉब कार्ड
+        var s = rec.status || 'DELIVERED';
         var themeClass = 'card-theme-delivered';
         var baseStyle = 'font-weight:900; font-size:0.85rem; padding:4px 10px; border-radius:6px; letter-spacing:0.5px;';
         var statusBadgeText = '📦 OUT';
@@ -3050,7 +3076,7 @@
 
         if (s === 'PENDING') {
           themeClass = 'card-theme-pending'; 
-          statusBadgeText = '⚙️ PROCESS'; 
+          statusBadgeText = '⚙️️ PROCESS'; 
           statusBadgeStyle = 'background:#ea580c; color:#ffffff; border:1.5px solid #c2410c; ' + baseStyle;
         } else if (s === 'READY') {
           themeClass = 'card-theme-ready'; 
@@ -3076,18 +3102,12 @@
         } else {
           balanceBadgeHtml = '<span style="background:#f0fdf4; color:#16a34a; border:1.5px solid #bbf7d0; padding:3px 8px; border-radius:6px; font-weight:900; font-size:0.85rem; white-space:nowrap;">✅ चुकता</span>';
         }
-        
-var isBalTab = (currentFilter === 'BALANCE' && !isSearching);
-        var cardClickAction = isBalTab ? ('openStatement(\'' + cid + '\')') : ('openJobDetailHub(\'' + rec.code + '\')');
-        var mainBadgeHtml = isBalTab 
-          ? ('<span class="badge badge-cust badge-clickable" onclick="event.stopPropagation(); openStatement(\'' + cid + '\')" title="📄 ग्राहक खाता देखें" style="font-size: 1.05rem; font-weight: 900; padding: 3px 10px;">🆔 ' + cid + '</span>')
-          : ('<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️</span>');
 
-        cardsHtml += '<div class="record-card ' + themeClass + '" onclick="' + cardClickAction + '" title="विवरण देखने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
+        cardsHtml += '<div class="record-card ' + themeClass + '" onclick="openJobDetailHub(\'' + rec.code + '\')" title="पूरा विवरण देखने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
           
           '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">' +
-            mainBadgeHtml +
-                   '<span class="badge badge-clickable" style="' + statusBadgeStyle + '" onclick="event.stopPropagation(); openQuickStatus(\'' + rec.code + '\')" title="⚡ स्थिति बदलें">' + statusBadgeText + '</span>' +
+            '<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️</span>' +
+            '<span class="badge badge-clickable" style="' + statusBadgeStyle + '" onclick="event.stopPropagation(); openQuickStatus(\'' + rec.code + '\')" title="⚡ स्थिति बदलें">' + statusBadgeText + '</span>' +
             '<span class="badge-clickable" onclick="event.stopPropagation(); openQuickPayModalFromCard(\'' + rec.code + '\')" title="💵 पेमेंट जमा करें">' + balanceBadgeHtml + '</span>' +
           '</div>' +
 
