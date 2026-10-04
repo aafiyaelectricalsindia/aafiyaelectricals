@@ -182,9 +182,75 @@
     }
     .missing-chip:hover { background: #0284c7; color: #ffffff; transform: scale(1.05); }
     #loader { text-align: center; padding: 15px; font-weight: 900; color: var(--primary); }
+
+    /* 🌀 AAFIYA ELECTRICALS ब्रांडेड सर्फिंग लोडर एनीमेशन */
+    #aafiyaBrandLoader {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px);
+      z-index: 10000; display: none; justify-content: center; align-items: center;
+    }
+    .loader-box-wrap {
+      text-align: center; display: flex; flex-direction: column; align-items: center;
+    }
+    .loader-orbit-circle {
+      position: relative; width: 175px; height: 175px;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .loader-orbit-outer {
+      position: absolute; width: 100%; height: 100%; border-radius: 50%;
+      border: 4px solid transparent;
+      border-top-color: #0d9488; border-right-color: #f59e0b;
+      box-shadow: 0 0 15px rgba(13, 148, 136, 0.4);
+      animation: aafiyaSpinClockwise 1.1s linear infinite;
+    }
+    .loader-orbit-inner {
+      position: absolute; width: 80%; height: 80%; border-radius: 50%;
+      border: 3px solid transparent;
+      border-bottom-color: #38bdf8; border-left-color: #10b981;
+      animation: aafiyaSpinCounter 1.5s linear infinite;
+    }
+    .loader-text-core {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 10px; text-align: center; max-width: 135px; z-index: 10;
+    }
+    .loader-typewriter-text {
+      font-size: 0.96rem; font-weight: 950; color: #fef08a; letter-spacing: 1px;
+      text-shadow: 0 0 12px rgba(245, 158, 11, 0.85);
+      min-height: 40px; display: flex; align-items: center; justify-content: center;
+      line-height: 1.25; word-break: break-word;
+    }
+    .loader-sub-tag {
+      font-size: 0.62rem; font-weight: 900; color: #5eead4; letter-spacing: 1.5px; margin-top: 3px;
+    }
+    .loader-msg-text {
+      margin-top: 18px; color: #ffffff; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.5px;
+    }
+    @keyframes aafiyaSpinClockwise {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes aafiyaSpinCounter {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
   </style>
 </head>
 <body>
+
+  <!-- 🌀 AAFIYA ELECTRICALS कस्टम ब्रांडेड सर्फिंग लोडर -->
+  <div id="aafiyaBrandLoader">
+    <div class="loader-box-wrap">
+      <div class="loader-orbit-circle">
+        <div class="loader-orbit-outer"></div>
+        <div class="loader-orbit-inner"></div>
+        <div class="loader-text-core">
+          <div id="loaderTypingText" class="loader-typewriter-text">AAFIYA</div>
+          <div class="loader-sub-tag">⚡ ELECTRICALS ⚡</div>
+        </div>
+      </div>
+      <div id="loaderStatusMsg" class="loader-msg-text">सुरक्षित हो रहा है...</div>
+    </div>
+  </div>
 
   <!-- लॉगिन स्क्रीन -->
   <div id="loginOverlay">
@@ -228,7 +294,7 @@
           <div class="menu-item mi-all" onclick="selectTopFilter('ALL')"><span>📋 सभी</span> <span class="menu-count" id="count-ALL">0</span></div>
           <div class="menu-item mi-pending" onclick="selectTopFilter('PENDING')"><span>⏳ चालू काम</span> <span class="menu-count" id="count-PENDING">0</span></div>
           <div class="menu-item mi-ready" onclick="selectTopFilter('READY')"><span>🟢 तैयार</span> <span class="menu-count" id="count-READY">0</span></div>
-          <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
+          <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
           <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
           
           <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
@@ -878,7 +944,39 @@
     }
 
     // ==============================================================================================
-    // 📊 2. मुख्य स्टेट वैरिएबल्स
+    // 🌀 2. AAFIYA ELECTRICALS लोडर टाइपराइटर व स्पिनर कंट्रोल
+    // ==============================================================================================
+    var loaderTimer = null;
+    var fullBrandText = "AAFIYA ELECTRICALS";
+
+    function showAafiyaLoader(msg) {
+      var el = document.getElementById('aafiyaBrandLoader');
+      var msgEl = document.getElementById('loaderStatusMsg');
+      var textEl = document.getElementById('loaderTypingText');
+      if (msgEl) msgEl.innerText = msg || 'सुरक्षित हो रहा है...';
+      if (el) el.style.display = 'flex';
+
+      var charIndex = 0;
+      if (loaderTimer) clearInterval(loaderTimer);
+      if (textEl) textEl.innerText = fullBrandText.charAt(0);
+
+      loaderTimer = setInterval(function() {
+        charIndex++;
+        if (charIndex > fullBrandText.length) {
+          charIndex = 1;
+        }
+        if (textEl) textEl.innerText = fullBrandText.substring(0, charIndex);
+      }, 105);
+    }
+
+    function hideAafiyaLoader() {
+      var el = document.getElementById('aafiyaBrandLoader');
+      if (el) el.style.display = 'none';
+      if (loaderTimer) clearInterval(loaderTimer);
+    }
+
+    // ==============================================================================================
+    // 📊 3. मुख्य स्टेट वैरिएबल्स
     // ==============================================================================================
     var allRecords = [];
     var trashRecords = [];
@@ -1286,6 +1384,7 @@
       e.preventDefault();
       var btn = document.getElementById('stockSubmitBtn');
       btn.disabled = true; btn.innerText = '⏳ सेव हो रहा है...';
+      showAafiyaLoader('📦 नया स्टॉक सुरक्षित हो रहा है...');
 
       var data = {
         item: document.getElementById('stockItemType').value.trim().toUpperCase(),
@@ -1295,6 +1394,7 @@
 
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           btn.disabled = false; btn.innerText = '📦 स्टॉक में सुरक्षित करें';
           if (res && res.success) {
             alert('✅ नया सीरियल नंबर स्टॉक में जुड़ गया!');
@@ -1302,6 +1402,7 @@
           } else { alert(res ? res.message : 'त्रुटि हुई'); }
         })
         .withFailureHandler(function(err) {
+          hideAafiyaLoader();
           btn.disabled = false; btn.innerText = '📦 स्टॉक में सुरक्षित करें';
           alert('त्रुटि: ' + err.message);
         })
@@ -1337,12 +1438,18 @@
 
     function restoreTrashRecord(code) {
       if (!confirm("क्या आप वाकई जॉब #" + code + " को रिस्टोर करना चाहते हैं?")) return;
+      showAafiyaLoader('♻️ रिकॉर्ड रिस्टोर हो रहा है...');
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           if (res && res.success) {
             alert('✅ रिकॉर्ड सफलतापूर्वक रिस्टोर हो गया!');
             closeTrashModal(); fetchSheetData();
           } else { alert(res ? res.message : 'त्रुटि'); }
+        })
+        .withFailureHandler(function(err) {
+          hideAafiyaLoader();
+          alert('त्रुटि: ' + err.message);
         })
         .restoreRecordFromTrash(code, activePin);
     }
@@ -1467,7 +1574,6 @@
 
     function closeQuickPayModal() { document.getElementById('quickPayModal').style.display = 'none'; }
 
-    // 🔒 क्विक पेमेंट / चार्ज सुरक्षित करें (स्टाफ के लिए WhatsApp पूरी तरह बंद)
     function submitQuickPay(e) {
       e.preventDefault();
       var pin = getAuthorizedPin("पैसे जमा करें / चार्ज जोड़ें");
@@ -1491,8 +1597,11 @@
         note: payNote
       };
 
+      showAafiyaLoader('💵 पेमेंट / चार्ज सुरक्षित हो रहा है...');
+
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           btn.disabled = false;
           handleQuickPayModeChange();
           if (res && res.success) {
@@ -1500,7 +1609,6 @@
             closeQuickPayModal();
             fetchSheetData();
 
-            // 📲 केवल एडमिन (4455) के लिए WhatsApp खुलेगा
             if (activePin === "4455") {
               var targetRec = null;
               for (var x = 0; x < allRecords.length; x++) {
@@ -1528,6 +1636,7 @@
           } else { alert(res ? res.message : 'त्रुटि हुई'); }
         })
         .withFailureHandler(function(err) {
+          hideAafiyaLoader();
           btn.disabled = false;
           handleQuickPayModeChange();
           alert('त्रुटि: ' + err.message);
@@ -2085,10 +2194,12 @@
       };
 
       lastSavedRecord = record;
+      showAafiyaLoader('💾 जॉब ऑनलाइन सुरक्षित हो रहा है...');
 
       var pinToSend = isEditMode ? editPinUsed : activePin;
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           submitBtn.disabled = false; submitBtn.innerText = '💾 ऑनलाइन सुरक्षित करें';
           if (res && res.success) {
             closeJobModal(); fetchSheetData();
@@ -2097,6 +2208,7 @@
           } else { alert(res ? res.message : 'त्रुटि हुई'); }
         })
         .withFailureHandler(function(err) {
+          hideAafiyaLoader();
           submitBtn.disabled = false; submitBtn.innerText = '💾 ऑनलाइन सुरक्षित करें';
           alert('त्रुटि: ' + err.message);
         })
@@ -2359,7 +2471,6 @@
 
     function closeStatusModal() { document.getElementById('statusModal').style.display = 'none'; }
 
-    // ⚡ त्वरित स्थिति सबमिट (स्टाफ के लिए WhatsApp बंद + होल्ड पर नया सीधा संदेश)
     function submitQuickStatus(e) {
       e.preventDefault();
       var btn = document.getElementById('qsSubmitBtn');
@@ -2392,14 +2503,16 @@
         data.inDate = chosenDate;
       }
 
+      showAafiyaLoader('⚡ स्थिति ऑनलाइन अपडेट हो रही है...');
+
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           btn.disabled = false; btn.innerText = '💾 स्थिति तुरंत अपडेट करें';
           if (res && res.success) {
             closeStatusModal(); 
             fetchSheetData();
 
-            // 📲 केवल एडमिन (4455) के लिए WhatsApp खुलेगा
             if (activePin === "4455") {
               var targetRec = null;
               for (var x = 0; x < allRecords.length; x++) {
@@ -2444,6 +2557,7 @@
           } else { alert(res ? res.message : 'त्रुटि हुई'); }
         })
         .withFailureHandler(function(err) {
+          hideAafiyaLoader();
           btn.disabled = false; btn.innerText = '💾 स्थिति तुरंत अपडेट करें';
           alert('त्रुटि: ' + err.message);
         })
@@ -2523,8 +2637,11 @@
         walletBalance: 0
       };
 
+      showAafiyaLoader('👤 ग्राहक प्रोफ़ाइल अपडेट हो रही है...');
+
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           btn.disabled = false; btn.innerText = '💾 प्रोफ़ाइल अपडेट करें';
           if (res && res.success) {
             alert('सफलतापूर्वक अपडेट हुआ!');
@@ -2532,6 +2649,7 @@
           } else { alert(res ? res.message : 'त्रुटि हुई'); }
         })
         .withFailureHandler(function(err) {
+          hideAafiyaLoader();
           btn.disabled = false; btn.innerText = '💾 प्रोफ़ाइल अपडेट करें';
           alert('त्रुटि: ' + err.message);
         })
@@ -2739,10 +2857,17 @@
         deletePayPrompt = confirm("⚠️ इस जॉब पर ₹" + paidAlready + " जमा हैं。\n\nक्या जमा रकम भी पूरी तरह हटानी है?\n(OK = रकम भी हटाएं | CANCEL = सिर्फ जॉब हटाएं)");
       }
 
+      showAafiyaLoader('🗑️ रिकॉर्ड डिलीट हो रहा है...');
+
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           if (res && res.success) { alert('✅ रिकॉर्ड सफलतापूर्वक डिलीट कर दिया गया!'); fetchSheetData(); }
           else { alert('अस्वीकृत: ' + (res ? res.message : 'त्रुटि')); }
+        })
+        .withFailureHandler(function(err) {
+          hideAafiyaLoader();
+          alert('त्रुटि: ' + err.message);
         })
         .deleteRecordFromSheet(code, deletePayPrompt, "4455");
     }
@@ -2770,15 +2895,21 @@
         paidNow: 0
       };
 
+      showAafiyaLoader('🔄 सेम रिटर्न दर्ज हो रहा है...');
+
       google.script.run
         .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
           if (res && res.success) {
             alert('✅ जॉब #' + code + ' सफलतापूर्वक सेम रिटर्न दर्ज हो गया!');
             closeJobDetailHub();
             fetchSheetData();
           } else { alert(res ? res.message : 'त्रुटि हुई'); }
         })
-        .withFailureHandler(function(err) { alert('त्रुटि: ' + err.message); })
+        .withFailureHandler(function(err) { 
+          hideAafiyaLoader();
+          alert('त्रुटि: ' + err.message); 
+        })
         .updateQuickStatus(data, pin);
     }
 
@@ -2917,7 +3048,6 @@
       document.getElementById('jobDetailHubModal').style.display = 'none';
     }
 
-    // ⚡ खोज फ़ंक्शन (उधारी में केवल 1 यूनिक कार्ड दिखेगा)
     function searchRecords() {
       var q = document.getElementById('searchInput').value.trim().toLowerCase();
       var isSearching = (q.length > 0);
@@ -2929,7 +3059,6 @@
         var cid = rec.customerId ? rec.customerId.trim() : ('UNKNOWN_' + rec.code);
         var cData = customerLedgerMap[cid];
 
-        // ⚡ उधारी (BALANCE) फ़िल्टर: सीधे यूनिक ग्राहक खाते को पकड़ेगा
         if (currentFilter === 'BALANCE') {
           if (!cData || cData.netBalance <= 0) continue;
 
@@ -2951,7 +3080,6 @@
           continue;
         }
 
-        // बाकी फ़िल्टर्स के लिए सामान्य जॉब खोज
         if (isSearching) {
           var match = (
             (rec.code && rec.code.toLowerCase().indexOf(q) !== -1) ||
@@ -2988,7 +3116,6 @@
       renderList(filtered);
     }
 
-    // ⚡ रेंडर लिस्ट (उधारी में सिंगल अकाउंट कार्ड + बाकी में जॉब कार्ड्स)
     function renderList(list) {
       var area = document.getElementById('resultsArea');
       if (list.length === 0) {
@@ -3006,7 +3133,6 @@
         var netBal = cData.netBalance || 0;
         var adv = cData.advance || 0;
 
-        // 🌟 उधारी (BALANCE) फ़िल्टर: सिंगल अकाउंट कार्ड
         if (currentFilter === 'BALANCE') {
           cardsHtml += '<div class="record-card card-theme-balance" onclick="openStatement(\'' + cid + '\')" title="📄 ग्राहक का पूरा खाता खोलने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
             '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">' +
@@ -3036,7 +3162,6 @@
           continue;
         }
 
-        // बाकी सभी फ़िल्टर्स के लिए सामान्य जॉब कार्ड
         var s = rec.status || 'DELIVERED';
         var themeClass = 'card-theme-delivered';
         var baseStyle = 'font-weight:900; font-size:0.85rem; padding:4px 10px; border-radius:6px; letter-spacing:0.5px;';
@@ -3074,7 +3199,7 @@
 
         cardsHtml += '<div class="record-card ' + themeClass + '" onclick="openJobDetailHub(\'' + rec.code + '\')" title="पूरा विवरण देखने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
           '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">' +
-            '<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️</span>' +
+            '<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️️</span>' +
             '<span class="badge badge-clickable" style="' + statusBadgeStyle + '" onclick="event.stopPropagation(); openQuickStatus(\'' + rec.code + '\')" title="⚡ स्थिति बदलें">' + statusBadgeText + '</span>' +
             '<span class="badge-clickable" onclick="event.stopPropagation(); openQuickPayModalFromCard(\'' + rec.code + '\')" title="💵 पेमेंट जमा करें">' + balanceBadgeHtml + '</span>' +
           '</div>' +
