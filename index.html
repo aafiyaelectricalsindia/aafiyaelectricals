@@ -19,7 +19,6 @@
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     input[type=number] { -moz-appearance: textfield; }
-
     input[type="text"], textarea { text-transform: uppercase; }
 
     #loginOverlay {
@@ -40,7 +39,6 @@
 
     #mainApp { display: none; width: 100%; }
     
-    /* 📱 मोबाइल स्क्रीन के बिल्कुल लेवल में संतुलित टॉप बार */
     .top-nav-bar {
       display: flex; justify-content: space-between; align-items: center; gap: 4px;
       margin-bottom: 10px; padding: 2px 0; width: 100%;
@@ -68,7 +66,6 @@
       border-radius: 10px; font-size: 0.74rem; font-weight: 900;
     }
 
-    /* 🔄 रिफ़्रेश बटन स्टाइल */
     .btn-refresh {
       background: #f1f5f9; color: #0f766e; border: 1.5px solid #cbd5e1;
       padding: 6px 10px; border-radius: 7px; font-size: 0.84rem; font-weight: 900;
@@ -76,7 +73,6 @@
     }
     .btn-refresh:active { background: #e2e8f0; }
 
-    /* 🎨 बड़ा और टच-फ़्रेंडली रंग-बिरंगा मेन्यू */
     .top-dropdown-menu {
       position: absolute; right: 0; top: 110%; min-width: 235px;
       background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px;
@@ -204,10 +200,9 @@
 
   <!-- मुख्य ऐप स्क्रीन -->
   <div id="mainApp">
-    <!-- लाइन 1: AAFIYA ELECTRICALS | [➕ NEW] | [🔄 रिफ़्रेश] | [ड्रॉपडाउन मेन्यू] -->
     <div class="top-nav-bar">
       <div class="brand-title">AAFIYA ELECTRICALS</div>
-     
+      
       <div style="display: flex; gap: 4px; align-items: center;">
         <button type="button" class="btn-refresh" onclick="fetchSheetData()" title="डेटा ताज़ा करें">
           <span>🔄</span>
@@ -225,48 +220,44 @@
           <span style="font-size: 0.75rem;">▼</span>
         </button>
 
-        <!-- रंग-बिरंगा मेन्यू -->
         <div id="topDropdownMenu" class="top-dropdown-menu" style="display: none;">
           <div style="padding: 6px 10px; font-size: 0.74rem; color: #64748b; font-weight: 900; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; margin-bottom: 4px;">
             ⏳ 15 MIN AUTO LOCK
           </div>
-         
+          
           <div class="menu-item mi-all" onclick="selectTopFilter('ALL')"><span>📋 सभी</span> <span class="menu-count" id="count-ALL">0</span></div>
           <div class="menu-item mi-pending" onclick="selectTopFilter('PENDING')"><span>⏳ चालू काम</span> <span class="menu-count" id="count-PENDING">0</span></div>
           <div class="menu-item mi-ready" onclick="selectTopFilter('READY')"><span>🟢 तैयार</span> <span class="menu-count" id="count-READY">0</span></div>
-          <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
+          <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
           <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
-         
-          <!-- वारंटी व डिलीवर केवल एडमिन (4455) को दिखेंगे -->
+          
           <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
           <div class="menu-item mi-delivered" id="menuItem-DELIVERED" onclick="selectTopFilter('DELIVERED')"><span>📦 डिलीवर</span> <span class="menu-count" id="count-DELIVERED">0</span></div>
-         
+          
           <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
-         
+          
           <div class="menu-item mi-missing" id="menuItem-MISSING" onclick="openMissingCodesModal()">
             <span>🔢 छूटे हुए कोड्स</span>
             <span class="menu-count" id="count-MISSING">0</span>
           </div>
 
           <div class="menu-item mi-stock" onclick="openStockModal()"><span>📦 नया स्टॉक जोड़ें</span></div>
-         
+          
           <div class="menu-item mi-trash" id="adminTrashMenuItem" style="display:none;" onclick="openTrashModal()">
             <span>🗑️ ट्रैश बिन</span>
             <span class="menu-count" id="count-TRASH">0</span>
           </div>
-         
+          
           <div class="menu-item mi-logout" onclick="logout()"><span>🔒 लॉक (LOGOUT)</span></div>
         </div>
       </div>
     </div>
 
-    <!-- लाइन 2: सर्च बार -->
     <div style="margin-bottom: 10px;">
       <input type="text" id="searchInput" class="search-box" placeholder="🔍 कोड, ID, ग्राहक, मोबाइल, सामान से खोजें..." onkeyup="searchRecords()">
       <div id="searchStats" style="font-size: 0.8rem; color: #64748b; font-weight: 800; padding: 0 2px;"></div>
     </div>
 
-    <!-- लाइन 3: ग्राहक जॉब कार्ड्स -->
     <div id="loader">🔄 GOOGLE SHEET से डेटा लोड हो रहा है...</div>
     <div id="resultsArea"></div>
   </div>
@@ -304,7 +295,6 @@
 
       <div class="modal-body">
         <form id="jobForm" onsubmit="saveJobRecord(event)">
-          <!-- जॉब टाइप सेलेक्टर -->
           <div class="job-type-selector" id="jobTypeSelector">
             <div class="job-type-btn active" id="jtBtn-REPAIR" onclick="setJobCategory('REPAIR')">🛠️ दुकान रिपेयरिंग</div>
             <div class="job-type-btn" id="jtBtn-VISIT" onclick="setJobCategory('VISIT')">🏠 होम विज़िट</div>
@@ -312,11 +302,10 @@
           </div>
           <input type="hidden" id="jobCategory" value="REPAIR">
 
-          <!-- जॉब नंबर और कस्टमर ID बार -->
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; flex-wrap: wrap;">
             <div style="display: flex; gap: 8px; align-items: center;">
               <span style="font-weight: 900; color: #0369a1; font-size: 1.15rem;" id="displayJobCode">#1315</span>
-             
+              
               <div id="adminJobCodeWrapper" style="display: none; align-items: center; background: #ffffff; padding: 2px 8px; border-radius: 6px; border: 2px solid #0284c7;">
                 <span style="font-weight: 900; color: #0284c7; font-size: 1.15rem; margin-right: 3px;">#</span>
                 <input type="number" id="adminJobCodeInput" style="width: 85px; font-weight: 900; color: #0369a1; font-size: 1.15rem; border: none; outline: none; padding: 2px 0;" placeholder="1315" onwheel="this.blur()">
@@ -328,7 +317,6 @@
             </div>
           </div>
 
-          <!-- 📅 आने की तारीख (IN) एवं डिलीवरी तारीख (OUT) बार -->
           <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 4px;">
@@ -344,7 +332,6 @@
               </div>
             </div>
 
-            <!-- 📤 डिलीवरी तारीख (OUT DATE) -->
             <div id="outDateRowContainer" style="display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
               <div style="display: flex; align-items: center; gap: 4px;">
                 <span style="font-size: 0.82rem; font-weight: 800; color: #15803d;">📤 सामान डिलीवर तारीख (OUT):</span>
@@ -560,7 +547,6 @@
             </select>
           </div>
 
-          <!-- 📝 पेमेंट / चार्ज नोट -->
           <div class="form-group" style="margin-bottom: 10px;">
             <label style="color: #065f46; font-weight: 900; font-size: 0.85rem;">📝 नोट / रिमार्क (वैकल्पिक):</label>
             <input type="text" id="qpNote" placeholder="उदा. इन्वर्टर फिटिंग चार्ज" style="font-weight: 700; background: #ffffff;" oninput="this.value = this.value.toUpperCase();">
@@ -606,7 +592,7 @@
     </div>
   </div>
 
-  <!-- 📲 WhatsApp प्रिव्यू मॉडल (संदेश पुष्टि के लिए) -->
+  <!-- 📲 WhatsApp प्रिव्यू मॉडल -->
   <div id="whatsappModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 480px;">
       <div class="modal-header" style="background: #25d366;">
@@ -844,7 +830,6 @@
     // ==============================================================================================
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrciX8235dlCN794FujlD7h0DTsmqO1JvrX9Asv1zBxrnPJkzjEpoPof3VirCymA/exec";
 
-    // 🌐 ऑटो-ब्रिज: GitHub पर होने पर fetch चलाएगा, और Apps Script में होने पर native google.script.run
     if (typeof google === 'undefined' || !google.script || !google.script.run) {
       window.google = window.google || {};
       window.google.script = window.google.script || {};
@@ -893,7 +878,7 @@
     }
 
     // ==============================================================================================
-    // 📊 2. मुख्य वैरिएबल्स और स्टेट
+    // 📊 2. मुख्य स्टेट वैरिएबल्स
     // ==============================================================================================
     var allRecords = [];
     var trashRecords = [];
@@ -1442,7 +1427,7 @@
       var btn = document.getElementById('qpSubmitBtn');
       if (mode === 'DISCOUNT') {
         btn.style.background = '#0284c7';
-        btn.innerText = '🏷️️ छूट सुरक्षित करें (माफ़)';
+        btn.innerText = '🏷️ छूट सुरक्षित करें (माफ़)';
       } else if (mode === 'REFUND') {
         btn.style.background = '#dc2626';
         btn.innerText = '🔴 रिफंड दर्ज करें (कैश वापसी)';
@@ -1482,7 +1467,7 @@
 
     function closeQuickPayModal() { document.getElementById('quickPayModal').style.display = 'none'; }
 
-    // 🔒 क्विक पेमेंट / चार्ज सुरक्षित करें (स्टाफ के लिए WhatsApp बंद)
+    // 🔒 क्विक पेमेंट / चार्ज सुरक्षित करें (स्टाफ के लिए WhatsApp पूरी तरह बंद)
     function submitQuickPay(e) {
       e.preventDefault();
       var pin = getAuthorizedPin("पैसे जमा करें / चार्ज जोड़ें");
@@ -1527,7 +1512,7 @@
                 if (payMode === 'INSTALLATION') {
                   msgText = "*AAFIYA ELECTRICALS*\n" +
                             "प्रिय " + targetRec.name + ",\n" +
-                            "आपके जॉब #" + jCode + " में ₹" + payAmt + " इंस्टॉलेशन / सर्विस चार्ज बिल में जोड़ दिया गया है" + noteText + "।\n" +
+                            "आपके जॉब #" + jCode + " में ₹" + payAmt + " सर्विस / फिटिंग चार्ज बिल में जोड़ दिया गया है" + noteText + "।\n" +
                             "📞 संपर्क: 8859623437";
                 } else {
                   msgText = "*AAFIYA ELECTRICALS*\n" +
@@ -1738,7 +1723,6 @@
           }
           populateDatalists();
 
-          // ⚡ अगर बैकएंड ने कुल लेज़र भेजा है तो सीधे इस्तेमाल करें
           if (res && res.customerLedgerMap && Object.keys(res.customerLedgerMap).length > 0) {
             customerLedgerMap = res.customerLedgerMap;
           } else {
@@ -1765,7 +1749,6 @@
       computeCustomerLedgerMap();
       var bCount = 0, pCount = 0, rCount = 0, hCount = 0, dCount = 0, wCount = 0;
 
-      // ⚡ उधारी वाले कुल यूनिक ग्राहक खातों की गिनती
       for (var cKey in customerLedgerMap) {
         if (customerLedgerMap[cKey].netBalance > 0) bCount++;
       }
@@ -2090,6 +2073,7 @@
         name: isEditMode ? (oldRec ? oldRec.name : '') : document.getElementById('custName').value.trim().toUpperCase(),
         phone: isEditMode ? (oldRec ? oldRec.phone : '') : document.getElementById('custPhone').value.trim(),
         address: isEditMode ? (oldRec ? oldRec.address : '') : document.getElementById('custAddress').value.trim().toUpperCase(),
+        category: cat,
         item: itemVal, brand: brandVal, work: workText,
         components: compText,
         estimate: parseFloat(document.getElementById('estimateAmount').value || '0'),
@@ -2151,14 +2135,44 @@
       }
       closeReceiptModal();
       var rec = lastSavedRecord;
-      var msg = "*AAFIYA ELECTRICALS*\n" +
-                "प्रिय " + rec.name + ",\n" +
-                "आपका " + rec.item + (rec.brand ? " (" + rec.brand + ")" : "") + " रिपेयरिंग के लिए दर्ज कर लिया गया है।\n" +
-                "🔹 जॉब टोकन: #" + rec.code + "\n" +
-                "🔹 दिनांक: " + rec.inDate + "\n" +
-                (rec.paid > 0 ? ("🔹 एडवांस जमा: ₹" + rec.paid + "\n") : "") +
-                "(सामान तैयार होने पर आपको सूचित कर दिया जाएगा।)\n" +
-                "📞 संपर्क: 8859623437";
+      var serialMatch = (rec.work || '').match(/\[S\/N:\s*([^\]]+)\]/);
+      var serialText = serialMatch ? ("🔢 सीरियल नंबर: " + serialMatch[1] + "\n") : "";
+      var msg = "";
+
+      if (rec.category === 'SALE') {
+        msg = "*AAFIYA ELECTRICALS*\n" +
+              "प्रिय " + rec.name + ",\n" +
+              "आफ़िया इलेक्ट्रिकल्स से खरीदारी करने के लिए आपका बहुत-बहुत धन्यवाद!\n\n" +
+              "🏷️ सामान: " + rec.item + (rec.brand ? " (" + rec.brand + ")" : "") + "\n" +
+              serialText +
+              "🔹 बिल/टोकन: #" + rec.code + "\n" +
+              "🔹 दिनांक: " + rec.inDate + "\n" +
+              "🔹 फाइनल बिल: ₹" + (rec.bill || 0) + "\n" +
+              (rec.paid > 0 ? ("🔹 प्राप्त भुगतान: ₹" + rec.paid + "\n") : "") +
+              (rec.expiryDate ? ("🛡️ वारंटी एक्सपायरी: " + rec.expiryDate + "\n") : "") +
+              "\n(वारंटी व सेवा के लिए इस संदेश को सुरक्षित रखें।)\n" +
+              "📞 संपर्क: 8859623437";
+      } else if (rec.category === 'VISIT') {
+        msg = "*AAFIYA ELECTRICALS*\n" +
+              "प्रिय " + rec.name + ",\n" +
+              "आपकी होम सर्विस विज़िट दर्ज कर ली गई है।\n" +
+              "🔹 सेवा टोकन: #" + rec.code + "\n" +
+              "🔹 कार्य: " + rec.item + "\n" +
+              "🔹 दिनांक: " + rec.inDate + "\n" +
+              (rec.paid > 0 ? ("🔹 एडवांस जमा: ₹" + rec.paid + "\n") : "") +
+              "टेक्नीशियन जल्द ही आपसे संपर्क करेंगे।\n" +
+              "📞 संपर्क: 8859623437";
+      } else {
+        msg = "*AAFIYA ELECTRICALS*\n" +
+              "प्रिय " + rec.name + ",\n" +
+              "आपका " + rec.item + (rec.brand ? " (" + rec.brand + ")" : "") + " रिपेयरिंग के लिए दर्ज कर लिया गया है।\n" +
+              "🔹 जॉब टोकन: #" + rec.code + "\n" +
+              "🔹 दिनांक: " + rec.inDate + "\n" +
+              (rec.paid > 0 ? ("🔹 एडवांस जमा: ₹" + rec.paid + "\n") : "") +
+              "(सामान तैयार होने पर आपको सूचित कर दिया जाएगा।)\n" +
+              "📞 संपर्क: 8859623437";
+      }
+
       openWhatsappModal(rec.phone, msg);
     }
 
@@ -2903,7 +2917,7 @@
       document.getElementById('jobDetailHubModal').style.display = 'none';
     }
 
-    // ⚡ सर्च फ़ंक्शन (उधारी में केवल 1 कस्टमर कार्ड दिखाने के साथ)
+    // ⚡ खोज फ़ंक्शन (उधारी में केवल 1 यूनिक कार्ड दिखेगा)
     function searchRecords() {
       var q = document.getElementById('searchInput').value.trim().toLowerCase();
       var isSearching = (q.length > 0);
@@ -2915,7 +2929,7 @@
         var cid = rec.customerId ? rec.customerId.trim() : ('UNKNOWN_' + rec.code);
         var cData = customerLedgerMap[cid];
 
-        // ⚡ उधारी (BALANCE) फ़िल्टर: जॉब्स के बजाय सीधे ग्राहक खाते को पकड़ेगा
+        // ⚡ उधारी (BALANCE) फ़िल्टर: सीधे यूनिक ग्राहक खाते को पकड़ेगा
         if (currentFilter === 'BALANCE') {
           if (!cData || cData.netBalance <= 0) continue;
 
@@ -2937,7 +2951,7 @@
           continue;
         }
 
-        // बाकी सभी फ़िल्टर्स के लिए सामान्य जॉब खोज
+        // बाकी फ़िल्टर्स के लिए सामान्य जॉब खोज
         if (isSearching) {
           var match = (
             (rec.code && rec.code.toLowerCase().indexOf(q) !== -1) ||
@@ -2974,7 +2988,7 @@
       renderList(filtered);
     }
 
-    // ⚡ रेंडर लिस्ट (उधारी में सिंगल अकाउंट कार्ड + बाकी में जॉब कार्ड)
+    // ⚡ रेंडर लिस्ट (उधारी में सिंगल अकाउंट कार्ड + बाकी में जॉब कार्ड्स)
     function renderList(list) {
       var area = document.getElementById('resultsArea');
       if (list.length === 0) {
