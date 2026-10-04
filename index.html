@@ -960,13 +960,21 @@
       if (loaderTimer) clearInterval(loaderTimer);
       if (textEl) textEl.innerText = fullBrandText.charAt(0);
 
+      var pauseCount = 0;
       loaderTimer = setInterval(function() {
+        // जब पूरा नाम टाइप हो जाए, तो 1.5 सेकंड का ठहराव
+        if (pauseCount > 0) {
+          pauseCount--;
+          return;
+        }
+
         charIndex++;
         if (charIndex > fullBrandText.length) {
+          pauseCount = 6; // पूरा नाम दिखने पर रुकने का समय
           charIndex = 1;
         }
         if (textEl) textEl.innerText = fullBrandText.substring(0, charIndex);
-      }, 105);
+      }, 220); // ⚡ स्पीड 105 से घटाकर 220ms (धीमी व स्मूथ) कर दी गई
     }
 
     function hideAafiyaLoader() {
