@@ -148,6 +148,7 @@
     .card-theme-hold { background: #faf5ff; border-color: #e9d5ff; border-left-color: #8b5cf6; }
     .card-theme-balance { background: #fef5f5; border-color: #fca5a5; border-left-color: #ef4444; }
     .card-theme-delivered { background: #ffffff; border-color: #e2e8f0; border-left-color: #94a3b8; }
+    .card-theme-visit { background: #faf5ff; border-color: #ddd6fe; border-left-color: #7c3aed; }
 
     .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 0.8rem; cursor: default; }
     .badge-clickable { cursor: pointer; transition: transform 0.12s ease; }
@@ -656,7 +657,7 @@
             <select id="qpPayMode" style="font-weight: 900; font-size: 0.95rem; border: 1.5px solid #10b981; background: #f0fdf4; color: #065f46; padding: 8px 10px;" onchange="handleQuickPayModeChange()">
               <option value="CASH" selected>💵 ग्राहक से जमा (नकद / CASH)</option>
               <option value="UPI">📱 ग्राहक से जमा (ऑनलाइन / UPI)</option>
-              <option value="DISCOUNT">🏷️️ छूट / राउंड ऑफ (माफ़ - बकाये से घटाएं)</option>
+              <option value="DISCOUNT">🏷️ छूट / राउंड ऑफ (माफ़ - बकाये से घटाएं)</option>
               <option value="REFUND">🔴 नकद वापसी (ग्राहक को रिफंड दिया)</option>
               <option value="INSTALLATION">🔧 इंस्टॉलेशन / सर्विस चार्ज (बिल में जोड़ें)</option>
             </select>
@@ -698,7 +699,7 @@
         </div>
 
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button type="button" class="btn" style="background: #10b981;" onclick="printJobReceipt()">🖨️️ पक्का बिल प्रिंट करें</button>
+          <button type="button" class="btn" style="background: #10b981;" onclick="printJobReceipt()">🖨️ पक्का बिल प्रिंट करें</button>
           <button type="button" class="btn" style="background: #25d366;" onclick="triggerWhatsappFromReceipt()">📲 WHATSAPP भेजें</button>
           <button type="button" class="btn" onclick="closeReceiptModal()">✅ ठीक है (OK)</button>
           <button type="button" class="btn" style="background: #0284c7;" onclick="openAnotherNewEntry()">➕ अगला सामान दर्ज करें</button>
@@ -993,7 +994,7 @@
     }
 
     // ==============================================================================================
-    // 🌀 2. AAFIYA ELECTRICALS लोडर टाइपराइटर व स्पिनर कंट्रोल (स्मूथ व धीमी गति)
+    // 🌀 2. AAFIYA ELECTRICALS लोडर टाइपराइटर व स्पिनर कंट्रोल
     // ==============================================================================================
     var loaderTimer = null;
     var fullBrandText = "AAFIYA ELECTRICALS";
@@ -1017,7 +1018,7 @@
         }
         charIndex++;
         if (charIndex > fullBrandText.length) {
-          pauseCount = 6; // पूरा नाम टाइप होने पर 1.3 सेकंड का ठहराव
+          pauseCount = 6;
           charIndex = 1;
         }
         if (textEl) textEl.innerText = fullBrandText.substring(0, charIndex);
@@ -1031,11 +1032,11 @@
     }
 
     // ==============================================================================================
-    // 📊 3. मुख्य स्टेट वैरिएबल्स (लोड मोर और हेड पेज सहित)
+    // 📊 3. मुख्य स्टेट वैरिएबल्स
     // ==============================================================================================
     var allRecords = [];
     var trashRecords = [];
-    var currentFilter = 'PENDING'; // डिफ़ॉल्ट रूप से चालू काम
+    var currentFilter = 'PENDING';
     var activePin = '';
     var isEditMode = false;
     var editPinUsed = '';
@@ -1047,7 +1048,6 @@
     var activeQsRecord = null;
     var pendingWhatsappPhone = '';
 
-    // ⚡ लोड मोर (Pagination) वैरिएबल्स
     var visibleLimit = 50;
     var lastFilteredList = [];
 
@@ -1140,14 +1140,13 @@
 
     function selectTopFilter(type) {
       currentFilter = type;
-      visibleLimit = 50; // फ़िल्टर बदलने पर 50 से शुरू करें
+      visibleLimit = 50;
       var m = document.getElementById('topDropdownMenu');
       if (m) m.style.display = 'none';
       updateTopMenuLabel();
       searchRecords();
     }
 
-    // ⭐ एडमिन द्वारा वर्तमान पेज को हमेशा के लिए हेड (डिफ़ॉल्ट) बनाना
     function setDefaultHeadTab() {
       if (activePin !== "4455") {
         alert("⚠️ यह सेटिंग केवल एडमिन ही कर सकते हैं।");
@@ -1165,7 +1164,6 @@
       document.getElementById('topMenuCurrentLabel').innerText = lbl;
       document.getElementById('topMenuCountPill').innerText = cnt;
 
-      // हेड स्टार बैज अपडेट
       var savedHead = localStorage.getItem('aafiya_default_filter') || 'PENDING';
       var tabs = ['ALL', 'PENDING', 'READY', 'HOLD', 'BALANCE', 'WARRANTY', 'DELIVERED'];
       tabs.forEach(function(t) {
@@ -1173,7 +1171,6 @@
         if (b) b.style.display = (t === savedHead) ? 'inline-block' : 'none';
       });
 
-      // एडमिन बटन की स्थिति
       var headBtn = document.getElementById('adminSetDefaultHeadBtn');
       if (headBtn && activePin === "4455") {
         if (currentFilter === savedHead) {
@@ -1227,7 +1224,6 @@
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('mainApp').style.display = 'block';
 
-        // एडमिन फीचर्स
         if (pin === "4455") {
           document.getElementById('adminTrashMenuItem').style.display = 'flex';
           document.getElementById('menuItem-WARRANTY').style.display = 'flex';
@@ -1242,7 +1238,6 @@
           document.getElementById('adminSetDefaultHeadBtn').style.display = 'none';
         }
 
-        // 🌟 हेड (डिफ़ॉल्ट) फ़िल्टर सेट करें
         var savedHead = localStorage.getItem('aafiya_default_filter') || 'PENDING';
         currentFilter = savedHead;
         visibleLimit = 50;
@@ -1545,7 +1540,7 @@
 
     function restoreTrashRecord(code) {
       if (!confirm("क्या आप वाकई जॉब #" + code + " को रिस्टोर करना चाहते हैं?")) return;
-      showAafiyaLoader('♻️ रिकॉर्ड रिस्टोर हो रहा है...');
+      showAafiyaLoader('♻️️ रिकॉर्ड रिस्टोर हो रहा है...');
       google.script.run
         .withSuccessHandler(function(res) {
           hideAafiyaLoader();
@@ -1910,7 +1905,6 @@
       }
     }
 
-    // ⚡ fetchSheetData: लॉगिन व रिफ्रेश दोनों पर AAFIYA सर्फिंग लोडर दिखाएगा
     function fetchSheetData() {
       var loader = document.getElementById('loader');
       if (loader) loader.style.display = 'none';
@@ -2236,7 +2230,7 @@
                     : document.getElementById('jobCode').value.trim();
       document.getElementById('jobCode').value = jCode;
       if (!jCode) {
-        alert("⚠️️ कृपया सही जॉब नंबर दर्ज करें!");
+        alert("⚠️ कृपया सही जॉब नंबर दर्ज करें!");
         submitBtn.disabled = false; submitBtn.innerText = '💾 ऑनलाइन सुरक्षित करें';
         return;
       }
@@ -3027,6 +3021,64 @@
         .updateQuickStatus(data, pin);
     }
 
+    // 🏠⚡ होम विज़िट को सीधे दुकान रिपेयरिंग (IN-SHOP) में बदलने का फंक्शन
+    function convertVisitToShopRepair(code) {
+      var r = null;
+      for (var i = 0; i < allRecords.length; i++) {
+        if (allRecords[i].code.toString().trim() === code.toString().trim()) { r = allRecords[i]; break; }
+      }
+      if (!r) return;
+
+      if (!confirm("क्या यह सामान ग्राहक के घर से दुकान पर लाया गया है?\n(यह होम विज़िट से बदलकर दुकान के चालू काम / PENDING में बदल जाएगा)")) return;
+
+      var pin = getAuthorizedPin("दुकान रिपेयर में बदलें");
+      if (!pin) return;
+
+      // वर्क डिस्क्रिप्शन से [🏠 HOME VISIT] हटाएं और नोट जोड़ें
+      var cleanWork = (r.work || '').replace(/\[🏠 HOME VISIT\]/g, '').replace(/HOME VISIT/g, '').trim();
+      cleanWork = cleanWork ? ('[🏠 विज़िट से दुकान लाया] ' + cleanWork) : '[🏠 विज़िट से दुकान लाया सामान]';
+
+      var updatedRec = {
+        code: r.code,
+        customerId: r.customerId,
+        name: r.name,
+        phone: r.phone,
+        address: r.address,
+        category: 'REPAIR',
+        item: r.item,
+        brand: r.brand,
+        work: cleanWork,
+        components: r.components || '',
+        estimate: r.estimate || 0,
+        bill: r.bill || 0,
+        paid: r.paid || 0,
+        status: 'PENDING',
+        warrantyDays: r.warrantyDays || 0,
+        inDate: r.inDate || getNowFormatted(),
+        outDate: '',
+        expiryDate: r.expiryDate || ''
+      };
+
+      showAafiyaLoader('🔄 दुकान रिपेयरिंग में बदला जा रहा है...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          hideAafiyaLoader();
+          if (res && res.success) {
+            alert('✅ जॉब #' + code + ' सफलतापूर्वक दुकान रिपेयरिंग (चालू काम) में बदल गया!');
+            closeJobDetailHub();
+            fetchSheetData();
+          } else {
+            alert(res ? res.message : 'त्रुटि हुई');
+          }
+        })
+        .withFailureHandler(function(err) {
+          hideAafiyaLoader();
+          alert('त्रुटि: ' + err.message);
+        })
+        .saveRecordToSheet(updatedRec, pin);
+    }
+
     function openJobDetailHub(code) {
       if (!code) return;
       var cleanCode = code.toString().replace(/[^0-9a-zA-Z]/g, '').trim();
@@ -3053,18 +3105,22 @@
       var activeW = isWarrantyActive(r.expiryDate);
       var s = r.status || 'DELIVERED';
       var isOut = (s === 'DELIVERED' || s === 'RETURN');
+      var isVisit = (r.category === 'VISIT');
 
       var statusText = '📦 OUT (दे दिया)';
       var statusBg = '#16a34a';
-      if (s === 'PENDING') { statusText = '⚙️ IN / PROCESS (चालू काम)'; statusBg = '#ea580c'; }
+      if (s === 'PENDING') { statusText = isVisit ? '🏠 HOME VISIT (विज़िट चालू)' : '⚙️ IN / PROCESS (चालू काम)'; statusBg = isVisit ? '#7c3aed' : '#ea580c'; }
       else if (s === 'READY') { statusText = '🟢 READY (तैयार है)'; statusBg = '#0284c7'; }
       else if (s === 'HOLD') { statusText = '⏸️ HOLD (होल्ड)'; statusBg = '#dc2626'; }
       else if (s === 'RETURN') { statusText = '🔄 RETURN (वापस)'; statusBg = '#475569'; }
 
+      // 🌟 होम विज़िट के लिए विशेष हेडर लुक
+      var headerTagHtml = isVisit
+        ? '<span style="background: #f3e8ff; color: #6b21a8; padding: 4px 12px; border-radius: 8px; font-weight: 950; font-size: 1.15rem; letter-spacing: 0.5px; border: 2px solid #a855f7; box-shadow: 0 2px 5px rgba(0,0,0,0.25); display: inline-flex; align-items: center; gap: 4px;">🏠 HOME VISIT #' + r.code + '</span>'
+        : '<span style="background: #fef08a; color: #854d0e; padding: 4px 12px; border-radius: 8px; font-weight: 950; font-size: 1.25rem; letter-spacing: 0.5px; border: 2px solid #eab308; box-shadow: 0 2px 5px rgba(0,0,0,0.25); display: inline-flex; align-items: center;">#' + r.code + '</span>';
+
       document.getElementById('hubModalTitleArea').innerHTML = '' +
-        '<span style="background: #fef08a; color: #854d0e; padding: 4px 12px; border-radius: 8px; font-weight: 950; font-size: 1.25rem; letter-spacing: 0.5px; border: 2px solid #eab308; box-shadow: 0 2px 5px rgba(0,0,0,0.25); display: inline-flex; align-items: center;">' +
-          '#' + r.code +
-        '</span>' +
+        headerTagHtml +
         '<span style="font-size: 1.05rem; color: #ffffff; font-weight: 900; margin-left: 4px;">' +
           'जॉब कार्ड सम्पूर्ण विवरण' +
         '</span>';
@@ -3085,9 +3141,15 @@
         (isOut ? ('<div><b>📤 सामान डिलीवरी तारीख (OUT):</b> <span style="font-weight: 900; color: #0f766e; background: #f0fdfa; padding: 2px 6px; border-radius: 4px; border: 1px solid #99f6e4;">' + (r.outDate || 'तारीख दर्ज नहीं') + '</span></div>') : '') +
       '</div>';
 
+      // 🔄 दुकान पर लाया गया (Convert Button)
+      var convertBtnHtml = (isVisit && !isOut)
+        ? '<button type="button" class="btn" style="background: #7c3aed; font-size: 0.9rem; padding: 10px; grid-column: span 2;" onclick="convertVisitToShopRepair(\'' + r.code + '\')">🔄 दुकान पर लाया गया (दुकान रिपेयर में बदलें)</button>'
+        : '';
+
       var buttonsHtml = '';
       if (activePin === '4455') {
         buttonsHtml = '' +
+          convertBtnHtml +
           '<button type="button" class="btn" style="background: #10b981; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); openQuickPayModalFromCard(\'' + r.code + '\')">💵 पैसे जमा करें</button>' +
           '<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px;" onclick="printSpecificJob(\'' + r.code + '\')">🖨️ पक्का बिल प्रिंट</button>' +
           '<button type="button" class="btn" style="background: #0284c7; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editJobFromBadge(\'' + r.code + '\')">✏️ जॉब एडिट करें</button>' +
@@ -3102,6 +3164,7 @@
         var sameReturnBtn = (!isOut) ? ('<button type="button" class="btn" style="background: #475569; font-size: 0.9rem; padding: 10px;" onclick="applySameReturnFromHub(\'' + r.code + '\')">🔄 सेम रिटर्न</button>') : '';
        
         buttonsHtml = '' +
+          convertBtnHtml +
           qpBtn +
           '<button type="button" class="btn" style="background: #0284c7; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); editJobFromBadge(\'' + r.code + '\')">' + editBtnText + '</button>' +
           '<button type="button" class="btn" style="background: #0f766e; font-size: 0.9rem; padding: 10px;" onclick="closeJobDetailHub(); repeatCustomer(' + origIdx + ')">➕ नया सामान जोड़ें</button>' +
@@ -3125,7 +3188,7 @@
         '</div>' +
 
         '<div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 0.92rem;">' +
-          '<div style="margin-bottom: 6px;"><b>⚡ सामान:</b> <span style="background: #e0f2fe; color: #0369a1; font-weight: 900; padding: 2px 8px; border-radius: 4px;">' + r.item + '</span>' + (r.brand ? (' <span class="badge badge-brand" style="margin-left: 4px;">🏷️ ' + r.brand + '</span>') : '') + '</div>' +
+          '<div style="margin-bottom: 6px;"><b>⚡ सामान:</b> <span style="background: #e0f2fe; color: #0369a1; font-weight: 900; padding: 2px 8px; border-radius: 4px;">' + r.item + '</span>' + (r.brand ? (' <span class="badge badge-brand" style="margin-left: 4px;">🏷️️ ' + r.brand + '</span>') : '') + '</div>' +
           serialHtml +
           (r.work ? ('<div style="margin-bottom: 5px; color: #1e293b; font-weight: 700;"><b>🛠️ काम / समस्या:</b> ' + r.work + '</div>') : '') +
           (r.components ? ('<div style="margin-bottom: 5px; color: #64748b; font-weight: 700;"><b>⚙️ पार्ट्स:</b> ' + r.components + '</div>') : '') +
@@ -3163,7 +3226,7 @@
     }
 
     function onSearchInputChanged() {
-      visibleLimit = 50; // नई खोज करने पर 50 से शुरू करें
+      visibleLimit = 50;
       searchRecords();
     }
 
@@ -3227,7 +3290,6 @@
       renderList(filtered);
     }
 
-    // ⚡ लोड मोर फंक्शन्स
     function loadMoreRecords() {
       visibleLimit += 50;
       renderList(lastFilteredList);
@@ -3252,7 +3314,6 @@
 
       var limit = Math.min(list.length, visibleLimit);
 
-      // हेडलाइन स्टेटस अपडेट
       if (currentFilter === 'BALANCE') {
         statsEl.innerText = (isSearching ? 'खोज परिणाम: ' : 'कुल उधारी खाते: ') + limit + ' / ' + list.length;
       } else {
@@ -3267,15 +3328,16 @@
         var cData = customerLedgerMap[cid] || { netBalance: 0, advance: 0, totalBill: 0, totalPaid: 0, jobCount: 1 };
         var netBal = cData.netBalance || 0;
         var adv = cData.advance || 0;
+        var isVisit = (rec.category === 'VISIT');
 
-        // 🌟 उधारी टैब में सिंगल अकाउंट कार्ड
+        // उधारी कार्ड
         if (currentFilter === 'BALANCE') {
           cardsHtml += '<div class="record-card card-theme-balance" onclick="openStatement(\'' + cid + '\')" title="📄 ग्राहक का पूरा खाता खोलने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
             '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">' +
               '<span class="badge badge-cust badge-clickable" onclick="event.stopPropagation(); openStatement(\'' + cid + '\')" title="📄 ग्राहक खाता देखें" style="font-size: 1.05rem; font-weight: 900; padding: 4px 10px; background:#f3e8ff; color:#7e22ce; border:1.5px solid #9333ea;">🆔 ' + cid + ' 📄</span>' +
               '<span class="badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-weight:800; font-size:0.8rem;">📦 कुल ' + cData.jobCount + ' काम</span>' +
               '<span class="badge-clickable" onclick="event.stopPropagation(); openQuickPayModalFromCard(\'' + rec.code + '\')" title="💵 पेमेंट जमा करें">' +
-                '<span style="background:#fee2e2; color:#b91c1c; border:1.5px solid #fca5a5; padding:3px 8px; border-radius:6px; font-weight:900; font-size:0.85rem; white-space:nowrap;">⚠️ DUE: ₹' + netBal + '</span>' +
+                '<span style="background:#fee2e2; color:#b91c1c; border:1.5px solid #fca5a5; padding:3px 8px; border-radius:6px; font-weight:900; font-size:0.85rem; white-space:nowrap;">⚠️️ DUE: ₹' + netBal + '</span>' +
               '</span>' +
             '</div>' +
             '<div style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin: 4px 0 3px 0; word-break: break-word; line-height: 1.25;">' +
@@ -3298,17 +3360,17 @@
           continue;
         }
 
-        // बाकी सभी टैब्स के लिए जॉब कार्ड्स
+        // सामान्य जॉब कार्ड
         var s = rec.status || 'DELIVERED';
-        var themeClass = 'card-theme-delivered';
+        var themeClass = isVisit ? 'card-theme-visit' : 'card-theme-delivered';
         var baseStyle = 'font-weight:900; font-size:0.85rem; padding:4px 10px; border-radius:6px; letter-spacing:0.5px;';
         var statusBadgeText = '📦 OUT';
         var statusBadgeStyle = 'background:#16a34a; color:#ffffff; border:1.5px solid #15803d; ' + baseStyle;
 
         if (s === 'PENDING') {
-          themeClass = 'card-theme-pending';
-          statusBadgeText = '⚙️ PROCESS';
-          statusBadgeStyle = 'background:#ea580c; color:#ffffff; border:1.5px solid #c2410c; ' + baseStyle;
+          themeClass = isVisit ? 'card-theme-visit' : 'card-theme-pending';
+          statusBadgeText = isVisit ? '🏠 VISIT' : '⚙️ PROCESS';
+          statusBadgeStyle = isVisit ? ('background:#7c3aed; color:#ffffff; border:1.5px solid #5b21b6; ' + baseStyle) : ('background:#ea580c; color:#ffffff; border:1.5px solid #c2410c; ' + baseStyle);
         } else if (s === 'READY') {
           themeClass = 'card-theme-ready';
           statusBadgeText = '🟢 READY';
@@ -3334,9 +3396,14 @@
           balanceBadgeHtml = '<span style="background:#f0fdf4; color:#16a34a; border:1.5px solid #bbf7d0; padding:3px 8px; border-radius:6px; font-weight:900; font-size:0.85rem; white-space:nowrap;">✅ चुकता</span>';
         }
 
+        // 🏠 होम विज़िट के लिए टोकन नंबर बैज
+        var codeBadgeHtml = isVisit
+          ? '<span class="badge badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="background:#7c3aed; color:#ffffff; border:2px solid #5b21b6; font-size:1.05rem; font-weight:900; padding:3px 8px;">🏠 #' + rec.code + ' (VISIT) ✏️</span>'
+          : '<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️</span>';
+
         cardsHtml += '<div class="record-card ' + themeClass + '" onclick="openJobDetailHub(\'' + rec.code + '\')" title="पूरा विवरण देखने के लिए क्लिक करें" style="padding: 10px 14px; margin-bottom: 8px;">' +
           '<div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px;">' +
-            '<span class="badge badge-code badge-clickable" onclick="event.stopPropagation(); editJobFromBadge(\'' + rec.code + '\')" title="✏️ एडिट करें" style="font-size: 1.15rem; font-weight: 900; padding: 3px 10px;">#' + rec.code + ' ✏️</span>' +
+            codeBadgeHtml +
             '<span class="badge badge-clickable" style="' + statusBadgeStyle + '" onclick="event.stopPropagation(); openQuickStatus(\'' + rec.code + '\')" title="⚡ स्थिति बदलें">' + statusBadgeText + '</span>' +
             '<span class="badge-clickable" onclick="event.stopPropagation(); openQuickPayModalFromCard(\'' + rec.code + '\')" title="💵 पेमेंट जमा करें">' + balanceBadgeHtml + '</span>' +
           '</div>' +
@@ -3352,10 +3419,10 @@
               (rec.brand ? (' <span class="badge badge-brand" style="font-size: 0.78rem; padding: 2px 6px;">🏷️ ' + rec.brand + '</span>') : '') +
             '</div>' +
           '</div>' +
+          (isVisit ? ('<div style="font-size: 0.82rem; font-weight: 800; color: #6d28d9; margin-top: 4px; border-top: 1px dashed #ddd6fe; padding-top: 3px;">📍 ' + (rec.address || 'विज़िट पता नहीं लिखा') + '</div>') : '') +
         '</div>';
       }
 
-      // ⚡ नीचे वाली एंट्रियां देखने का बटन (लोड मोर)
       if (list.length > limit) {
         cardsHtml += '<div style="text-align: center; margin: 18px 0 25px 0; display: flex; flex-direction: column; align-items: center; gap: 8px;">' +
           '<button type="button" class="btn" onclick="loadMoreRecords()" style="background: #0284c7; padding: 12px 20px; font-size: 0.95rem; font-weight: 900; border-radius: 8px; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35); max-width: 360px; display: flex; align-items: center; justify-content: center; gap: 8px;">' +
