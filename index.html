@@ -38,6 +38,19 @@
     #loginError { color: #dc2626; font-size: 0.85rem; margin-top: 10px; font-weight: 800; display: none; }
 
     #mainApp { display: none; width: 100%; }
+
+    /* 📌 हमेशा ऊपर फ्रीज (Sticky) रहने वाला हेडर */
+    .sticky-top-header {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 900;
+      padding-top: 10px;
+      margin-top: -10px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #cbd5e1;
+      margin-bottom: 10px;
+    }
     
     .top-nav-bar {
       display: flex; justify-content: space-between; align-items: center; gap: 4px;
@@ -265,63 +278,69 @@
   </div>
 
   <!-- मुख्य ऐप स्क्रीन -->
+  <!-- मुख्य ऐप स्क्रीन -->
   <div id="mainApp">
-    <div class="top-nav-bar">
-      <div class="brand-title">AAFIYA ELECTRICALS</div>
-      
-      <div style="display: flex; gap: 4px; align-items: center;">
-        <button type="button" class="btn-refresh" onclick="fetchSheetData()" title="डेटा ताज़ा करें">
-          <span>🔄</span>
-        </button>
+    
+    <!-- 📌 फ्रीज हेडर (टॉप बार + सर्च बार दोनों लॉक रहेंगे) -->
+    <div class="sticky-top-header">
+      <div class="top-nav-bar">
+        <div class="brand-title">AAFIYA ELECTRICALS</div>
+        
+        <div style="display: flex; gap: 4px; align-items: center;">
+          <button type="button" class="btn-refresh" onclick="fetchSheetData()" title="डेटा ताज़ा करें">
+            <span>🔄</span>
+          </button>
 
-        <button type="button" class="btn-new-job" onclick="openNewEntryModal()">
-          <span>➕</span> <span>NEW</span>
-        </button>
-      </div>
+          <button type="button" class="btn-new-job" onclick="openNewEntryModal()">
+            <span>➕</span> <span>NEW</span>
+          </button>
+        </div>
 
-      <div style="position: relative;">
-        <button type="button" id="topMenuTriggerBtn" class="top-menu-btn" onclick="toggleTopMenu()">
-          <span id="topMenuCurrentLabel">सभी</span>
-          <span class="count-pill" id="topMenuCountPill">0</span>
-          <span style="font-size: 0.75rem;">▼</span>
-        </button>
+        <div style="position: relative;">
+          <button type="button" id="topMenuTriggerBtn" class="top-menu-btn" onclick="toggleTopMenu()">
+            <span id="topMenuCurrentLabel">सभी</span>
+            <span class="count-pill" id="topMenuCountPill">0</span>
+            <span style="font-size: 0.75rem;">▼</span>
+          </button>
 
-        <div id="topDropdownMenu" class="top-dropdown-menu" style="display: none;">
-          <div style="padding: 6px 10px; font-size: 0.74rem; color: #64748b; font-weight: 900; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; margin-bottom: 4px;">
-            ⏳ 15 MIN AUTO LOCK
+          <div id="topDropdownMenu" class="top-dropdown-menu" style="display: none;">
+            <div style="padding: 6px 10px; font-size: 0.74rem; color: #64748b; font-weight: 900; border-bottom: 1px solid #e2e8f0; background: #f8fafc; border-radius: 6px; margin-bottom: 4px;">
+              ⏳ 15 MIN AUTO LOCK
+            </div>
+            
+            <div class="menu-item mi-all" onclick="selectTopFilter('ALL')"><span>📋 सभी</span> <span class="menu-count" id="count-ALL">0</span></div>
+            <div class="menu-item mi-pending" onclick="selectTopFilter('PENDING')"><span>⏳ चालू काम</span> <span class="menu-count" id="count-PENDING">0</span></div>
+            <div class="menu-item mi-ready" onclick="selectTopFilter('READY')"><span>🟢 तैयार</span> <span class="menu-count" id="count-READY">0</span></div>
+            <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
+            <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
+            
+            <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
+            <div class="menu-item mi-delivered" id="menuItem-DELIVERED" onclick="selectTopFilter('DELIVERED')"><span>📦 डिलीवर</span> <span class="menu-count" id="count-DELIVERED">0</span></div>
+            
+            <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
+            
+            <div class="menu-item mi-missing" id="menuItem-MISSING" onclick="openMissingCodesModal()">
+              <span>🔢 छूटे हुए कोड्स</span>
+              <span class="menu-count" id="count-MISSING">0</span>
+            </div>
+
+            <div class="menu-item mi-stock" onclick="openStockModal()"><span>📦 नया स्टॉक जोड़ें</span></div>
+            
+            <div class="menu-item mi-trash" id="adminTrashMenuItem" style="display:none;" onclick="openTrashModal()">
+              <span>🗑️ ट्रैश बिन</span>
+              <span class="menu-count" id="count-TRASH">0</span>
+            </div>
+            
+            <div class="menu-item mi-logout" onclick="logout()"><span>🔒 लॉक (LOGOUT)</span></div>
           </div>
-          
-          <div class="menu-item mi-all" onclick="selectTopFilter('ALL')"><span>📋 सभी</span> <span class="menu-count" id="count-ALL">0</span></div>
-          <div class="menu-item mi-pending" onclick="selectTopFilter('PENDING')"><span>⏳ चालू काम</span> <span class="menu-count" id="count-PENDING">0</span></div>
-          <div class="menu-item mi-ready" onclick="selectTopFilter('READY')"><span>🟢 तैयार</span> <span class="menu-count" id="count-READY">0</span></div>
-          <div class="menu-item mi-hold" onclick="selectTopFilter('HOLD')"><span>⏸️ होल्ड</span> <span class="menu-count" id="count-HOLD">0</span></div>
-          <div class="menu-item mi-balance" onclick="selectTopFilter('BALANCE')"><span>⚠️ उधारी</span> <span class="menu-count" id="count-BALANCE">0</span></div>
-          
-          <div class="menu-item mi-warranty" id="menuItem-WARRANTY" onclick="selectTopFilter('WARRANTY')"><span>🛡️ वारंटी</span> <span class="menu-count" id="count-WARRANTY">0</span></div>
-          <div class="menu-item mi-delivered" id="menuItem-DELIVERED" onclick="selectTopFilter('DELIVERED')"><span>📦 डिलीवर</span> <span class="menu-count" id="count-DELIVERED">0</span></div>
-          
-          <div style="border-top: 1px dashed #cbd5e1; margin: 6px 0;"></div>
-          
-          <div class="menu-item mi-missing" id="menuItem-MISSING" onclick="openMissingCodesModal()">
-            <span>🔢 छूटे हुए कोड्स</span>
-            <span class="menu-count" id="count-MISSING">0</span>
-          </div>
-
-          <div class="menu-item mi-stock" onclick="openStockModal()"><span>📦 नया स्टॉक जोड़ें</span></div>
-          
-          <div class="menu-item mi-trash" id="adminTrashMenuItem" style="display:none;" onclick="openTrashModal()">
-            <span>🗑️ ट्रैश बिन</span>
-            <span class="menu-count" id="count-TRASH">0</span>
-          </div>
-          
-          <div class="menu-item mi-logout" onclick="logout()"><span>🔒 लॉक (LOGOUT)</span></div>
         </div>
       </div>
-    </div>
 
-    <div style="margin-bottom: 10px;">
-      <input type="text" id="searchInput" class="search-box" placeholder="🔍 कोड, ID, ग्राहक, मोबाइल, सामान से खोजें..." onkeyup="searchRecords()">
-      <div id="searchStats" style="font-size: 0.8rem; color: #64748b; font-weight: 800; padding: 0 2px;"></div>
+      <!-- सर्च बार भी ऊपर ही फ्रीज रहेगा -->
+      <div>
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 कोड, ID, ग्राहक, मोबाइल, सामान से खोजें..." onkeyup="searchRecords()">
+        <div id="searchStats" style="font-size: 0.8rem; color: #64748b; font-weight: 800; padding: 0 2px;"></div>
+      </div>
     </div>
 
     <div id="loader" style="display:none;">🔄 GOOGLE SHEET से डेटा लोड हो रहा है...</div>
